@@ -3,6 +3,7 @@
 import time
 from typing import TypeVar
 
+from openai.lib._parsing._responses import type_to_text_format_param
 from pydantic import BaseModel, ValidationError
 
 from .clients import openai_client
@@ -31,18 +32,20 @@ def structured_call(
     if max_output_tokens:
         kwargs["max_output_tokens"] = max_output_tokens
     last_error: Exception | None = None
+    text_format = {"format": type_to_text_format_param(schema)}
     for _ in range(attempts):
         start = time.perf_counter()
+        # responses.parse validates each output chunk separately and breaks when the JSON spans several chunks
+        response = openai_client().responses.create(
+            model=model, instructions=instructions, input=input, text=text_format, store=False, **kwargs
+        )
+        if response.status != "completed":
+            last_error = LLMOutputError(f"{step}: status={response.status} {response.incomplete_details}")
+            continue
         try:
-            response = openai_client().responses.parse(
-                model=model, instructions=instructions, input=input, text_format=schema, store=False, **kwargs
-            )
+            parsed = schema.model_validate_json(response.output_text)
         except ValidationError as exc:
             last_error = exc
-            continue
-        parsed = response.output_parsed
-        if parsed is None:
-            last_error = LLMOutputError(f"{step}: no parsed output (status={response.status})")
             continue
         return parsed, _usage(step, model, response, time.perf_counter() - start)
     raise LLMOutputError(f"{step}: failed after {attempts} attempts: {last_error}") from last_error

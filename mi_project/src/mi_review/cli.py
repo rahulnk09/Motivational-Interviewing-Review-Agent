@@ -3,6 +3,7 @@
 import argparse
 import sys
 import time
+from pathlib import Path
 
 from pydantic import BaseModel
 
@@ -151,6 +152,66 @@ def cmd_eval_coder(args) -> int:
     return 0
 
 
+def print_report(report) -> None:
+    r = report.rubric
+    print(f"\n=== {report.session_id} | target: {report.target_behavior} ===")
+    print(f"MI proficiency: {r.proficiency_points}/12 ({r.proficiency_band}) | change talk ratio: "
+          f"{'n/a' if r.change_talk_ratio is None else f'{r.change_talk_ratio:.0%}'}")
+    for m in r.metrics:
+        print(f"  {m.label:<30} {m.display:>6}  {m.level:<18} +{m.points}")
+    for name, g in (("Empathy", report.empathy), ("Collaboration", report.collaboration)):
+        print(f"{name} {g.score}: {g.justification} [{', '.join(e.timestamp for e in g.evidence)}]")
+    print("\nWhat went well:")
+    for f in report.what_went_well:
+        print(f"  [{f.evidence[0].timestamp}] {f.title} ({f.category}): {f.insight}")
+    print("What to improve:")
+    for f in report.what_to_improve:
+        print(f"  [{f.evidence[0].timestamp}] {f.title} ({f.category}): {f.insight}\n      -> try: {f.better_response}")
+    print(f"\nSummary: {report.overall_summary}")
+    print("Tips: " + " | ".join(report.coaching_tips))
+    for w in report.warnings:
+        print(f"WARNING: {w}")
+    u = report.usage
+    print(f"\nUsage: LLM in={u.input_tokens} (cached {u.cached_tokens}) out={u.output_tokens} (reasoning {u.reasoning_tokens}) "
+          f"llm_seconds={u.llm_seconds} | CU={u.cu.seconds if u.cu else '-'}s audio_hours={u.cu.audio_hours if u.cu else '-'} "
+          f"| stages={u.stage_seconds} total={u.total_seconds}s")
+
+
+def cmd_run(args) -> int:
+    from .config import REPORTS_DIR
+    from .graph import run_pipeline
+
+    def on_event(e: dict) -> None:
+        if e["status"] == "start":
+            print(f"> {e['message']} ...", flush=True)
+        else:
+            print(f"  done in {e['seconds']}s: {e['message']}", flush=True)
+
+    if args.annomi is not None:
+        from .annomi import load_transcript
+
+        report = run_pipeline(transcript=load_transcript(args.annomi), on_event=on_event)
+    else:
+        report = run_pipeline(args.media, args.start, args.end, on_event=on_event)
+    print_report(report)
+    print(f"Saved {REPORTS_DIR / (report.session_id + '.json')}")
+    return 0
+
+
+def cmd_eval_supervisor(args) -> int:
+    from .evals.eval_supervisor import run
+
+    run(ids=args.ids, model=args.model, effort=args.effort, repeat=args.repeat, workers=args.workers)
+    return 0
+
+
+def cmd_eval_ingest(args) -> int:
+    from .evals.eval_ingest import run
+
+    run(args.media, args.annomi, args.start, args.end, reuse=not args.fresh)
+    return 0
+
+
 def cmd_build_assets(args) -> int:
     from .annomi import build_assets
 
@@ -200,6 +261,30 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--effort", default=None)
     p.add_argument("--workers", type=int, default=6)
     p.set_defaults(fn=cmd_eval_coder)
+
+    p = sub.add_parser("run", help="full LangGraph pipeline (CU -> Coder -> metrics -> Supervisor -> report JSON)")
+    src = p.add_mutually_exclusive_group(required=True)
+    src.add_argument("--annomi", type=int, help="AnnoMI transcript id (skips CU)")
+    src.add_argument("--media")
+    p.add_argument("--start", type=float, default=0)
+    p.add_argument("--end", type=float, default=None)
+    p.set_defaults(fn=cmd_run)
+
+    p = sub.add_parser("eval-supervisor", help="evaluate global ratings / proficiency score on AnnoMI high vs low sessions")
+    p.add_argument("--ids", type=int, nargs="+", default=None)
+    p.add_argument("--model", default=None)
+    p.add_argument("--effort", default=None)
+    p.add_argument("--repeat", type=int, default=3, help="transcripts re-run to measure stability")
+    p.add_argument("--workers", type=int, default=6)
+    p.set_defaults(fn=cmd_eval_supervisor)
+
+    p = sub.add_parser("eval-ingest", help="audio pipeline vs the AnnoMI expert transcript of the same video")
+    p.add_argument("--media", default="mi_project/data/annomi_video_27.mp4")
+    p.add_argument("--annomi", type=int, default=27)
+    p.add_argument("--start", type=float, default=0)
+    p.add_argument("--end", type=float, default=None)
+    p.add_argument("--fresh", action="store_true", help="re-run the pipeline instead of reusing the saved report")
+    p.set_defaults(fn=cmd_eval_ingest)
 
     args = parser.parse_args(argv)
     return args.fn(args)
