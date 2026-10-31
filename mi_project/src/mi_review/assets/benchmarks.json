@@ -1,0 +1,86 @@
+{
+  "n_transcripts": {
+    "high": 110,
+    "low": 23
+  },
+  "metrics": {
+    "reflection_to_question": {
+      "high": {
+        "median": 1.0,
+        "q1": 0.548,
+        "q3": 1.525
+      },
+      "low": {
+        "median": 0.0,
+        "q1": 0.0,
+        "q3": 0.431
+      },
+      "auc_high_vs_low": 0.847
+    },
+    "pct_open_questions": {
+      "high": {
+        "median": 0.6,
+        "q1": 0.429,
+        "q3": 0.8
+      },
+      "low": {
+        "median": 0.524,
+        "q1": 0.2,
+        "q3": 1.0
+      },
+      "auc_high_vs_low": 0.512
+    },
+    "pct_complex_reflections": {
+      "high": {
+        "median": 0.444,
+        "q1": 0.25,
+        "q3": 0.667
+      },
+      "low": {
+        "median": 0.333,
+        "q1": 0.0,
+        "q3": 0.8
+      },
+      "auc_high_vs_low": 0.575
+    },
+    "change_talk_ratio": {
+      "high": {
+        "median": 0.743,
+        "q1": 0.5,
+        "q3": 0.923
+      },
+      "low": {
+        "median": 0.268,
+        "q1": 0.0,
+        "q3": 0.633
+      },
+      "auc_high_vs_low": 0.71
+    },
+    "pct_therapist_input": {
+      "high": {
+        "median": 0.083,
+        "q1": 0.019,
+        "q3": 0.184
+      },
+      "low": {
+        "median": 0.5,
+        "q1": 0.367,
+        "q3": 0.593
+      },
+      "auc_high_vs_low": 0.08
+    },
+    "therapist_word_share": {
+      "high": {
+        "median": 0.539,
+        "q1": 0.433,
+        "q3": 0.656
+      },
+      "low": {
+        "median": 0.641,
+        "q1": 0.557,
+        "q3": 0.668
+      },
+      "auc_high_vs_low": 0.353
+    }
+  }
+}

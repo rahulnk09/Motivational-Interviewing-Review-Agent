@@ -1,0 +1,401 @@
+{
+  "source_transcripts": [
+    60,
+    131
+  ],
+  "class_counts": {
+    "main_therapist_behaviour=reflection": 4,
+    "main_therapist_behaviour=question": 3,
+    "main_therapist_behaviour=therapist_input": 7,
+    "main_therapist_behaviour=other": 2,
+    "reflection_subtype=simple": 2,
+    "reflection_subtype=complex": 2,
+    "question_subtype=open": 2,
+    "question_subtype=closed": 2,
+    "therapist_input_subtype=information": 2,
+    "therapist_input_subtype=advice": 2,
+    "therapist_input_subtype=negotiation": 2,
+    "therapist_input_subtype=options": 2,
+    "client_talk_type=change": 2,
+    "client_talk_type=neutral": 2,
+    "client_talk_type=sustain": 2
+  },
+  "approx_tokens": 1402,
+  "examples": [
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Mm-hmm, yeah."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "That's very common. I mean, you go where you know, um, no one's gonna look down on you.",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "complex",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "And you're instant friends."
+      },
+      "turn": {
+        "role": "client",
+        "text": "Yeah, we share-- \"Okay, oh, a smoker, let's go out and have a smoke together,\" yeah.",
+        "labels": {
+          "client_talk_type": "sustain"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "I like that piece of jewelry, can I? [laughs]"
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Right, yeah, but with cigarettes, there is a sharing. You don't see that with any other drugs?",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "simple",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "You can't, no, not one of mine. So, um when are you thinking you might want to do this?"
+      },
+      "turn": {
+        "role": "client",
+        "text": "Um, you know, I guess I'll have to like, you know, get all of my information together.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Oh, they didn't realize-- They didn't look at the calendar."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Right, right. It's just like you-you-you-- Some people pick a quit date, like January 1st is still the most popular quit date—",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "information"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Yeah. Uh-huh, uh-huh. Yeah."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "So, for you, it's your, you know, it sounds like you really want to be prepared.",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "complex",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Right."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "So if you have a stash Nicorette gum if you decide to use it, I mean, you'd have to have other stashes, you know.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "advice"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "So if you have a stash Nicorette gum if you decide to use it, I mean, you'd have to have other stashes, you know."
+      },
+      "turn": {
+        "role": "client",
+        "text": "Yeah, and you know, another thing, uh, uh, you know, it's so so bang, but the weight gain is like—",
+        "labels": {
+          "client_talk_type": "sustain"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Oh, that's awesome, to know too."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Yeah. And, um, the same with the Nicorette gum, because it- nicotine is an appetite suppressant.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "information"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "-I don't feel like I'm like you know, it's gonna be-- I think gradually getting my- wrapping my brain around it will help, you know, before I just do, you know."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Yeah. Is it appealing the thought of quitting with a group at the same time?",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "open",
+          "therapist_input": "options"
+        }
+      }
+    },
+    {
+      "transcript_id": 60,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "All right, great. Good. Great."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "All right. Well, I appreciate you coming in. We'll set up another appointment and, um, get our resources together. We'll take it from there and—",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "simple",
+          "question": "none",
+          "therapist_input": "options"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": null,
+      "turn": {
+        "role": "therapist",
+        "text": "Good morning. It's really nice that you've come along to see me to talk about stopping smoking.",
+        "labels": {
+          "main_therapist_behaviour": "other",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Well, I need some medication if you can offer me some."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Absolutely, we're in the right place for that.",
+        "labels": {
+          "main_therapist_behaviour": "other",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "How much does it actually cost you a week?"
+      },
+      "turn": {
+        "role": "client",
+        "text": "It's-it's about-- Um, I'll buy and go through a pack a day, so it's almost £7.",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Mm-hmm."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Do you think that's enough to make you say goodbye to cigarettes?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "closed",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Well, what you do-- What do you suggest?"
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Generally, it works well if you find a time when you're not under a huge amount of other stresses and strains.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "advice"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Mm-hmm."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "What are the main reasons why you actually smoke? What do you enjoy most about it?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "open",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "Mm-hmm."
+      },
+      "turn": {
+        "role": "client",
+        "text": "-or sometimes I go out, but as I said, I'm the only one kind of outside.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "I never go down, I just need a break away from it all, just shut off. So, uh, I-I really enjoyed that. The cigarette just helps me calm down."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "Yeah. And what is your favorite cigarette of the day?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "closed",
+          "therapist_input": "none"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "therapist",
+        "text": "Okay. And what got you back?"
+      },
+      "turn": {
+        "role": "client",
+        "text": "It was, um-- To be honest, it was stress from an argument with my partner I remember.",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "Yeah."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "And that's exactly one of the symptoms of nicotine withdrawal that I'm looking to stop happening to you.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "negotiation"
+        }
+      }
+    },
+    {
+      "transcript_id": 131,
+      "topic": "smoking cessation",
+      "context": {
+        "role": "client",
+        "text": "A nice phone call."
+      },
+      "turn": {
+        "role": "therapist",
+        "text": "I'd be very happy to do that.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "negotiation"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+[
+  {
+    "transcript_id": 60,
+    "mi_quality": "high",
+    "topic": "smoking cessation",
+    "transcript_metrics": {
+      "reflection_to_question": 6.333,
+      "pct_open_questions": 0.667,
+      "pct_complex_reflections": 0.263,
+      "change_talk_ratio": 0.5,
+      "pct_therapist_input": 0.319,
+      "therapist_word_share": 0.575
+    },
+    "turns": [
+      {
+        "role": "therapist",
+        "text": "Right, yeah, but with cigarettes, there is a sharing. You don't see that with any other drugs?",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "simple",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Right. Right, yeah. You can't have my stash. [laughs]",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "You can't, no, not one of mine. So, um when are you thinking you might want to do this?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "simple",
+          "question": "open",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Um, you know, I guess I'll have to like, you know, get all of my information together.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Okay. Do your homework.",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "complex",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Right, do my homework and set up my like to have everything available to me.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Okay.",
+        "labels": {
+          "main_therapist_behaviour": "other",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "And then maybe set up another appointment with you.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Okay.",
+        "labels": {
+          "main_therapist_behaviour": "other",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "And maybe I don't know if-if that's like something that you'd be, you know, willing to do with me is to- help me set a date.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Sure.",
+        "labels": {
+          "main_therapist_behaviour": "reflection",
+          "reflection": "simple",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "And then you know, the next time I see, see progress, or maybe write-- have like a diary or something, I don't know.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      }
+    ]
+  },
+  {
+    "transcript_id": 131,
+    "mi_quality": "low",
+    "topic": "smoking cessation",
+    "transcript_metrics": {
+      "reflection_to_question": 0.667,
+      "pct_open_questions": 0.524,
+      "pct_complex_reflections": 0.429,
+      "change_talk_ratio": 0.733,
+      "pct_therapist_input": 0.152,
+      "therapist_word_share": 0.717
+    },
+    "turns": [
+      {
+        "role": "therapist",
+        "text": "Do you think that's enough to make you say goodbye to cigarettes?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "closed",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Yeah.",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Great, okay. So have you got a date in mind when you'd like to stop smoking?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "closed",
+          "therapist_input": "negotiation"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Well, what you do-- What do you suggest?",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Generally, it works well if you find a time when you're not under a huge amount of other stresses and strains.",
+        "labels": {
+          "main_therapist_behaviour": "therapist_input",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "advice"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Mm-hmm.",
+        "labels": {
+          "client_talk_type": "neutral"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "What are the main reasons why you actually smoke? What do you enjoy most about it?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "open",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "Um, it's just entertainment. Something, um, when I bored, it's got-- I've got-- I smoke-",
+        "labels": {
+          "client_talk_type": "sustain"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Mm-hmm.",
+        "labels": {
+          "main_therapist_behaviour": "other",
+          "reflection": "none",
+          "question": "none",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "-or sometimes I go out, but as I said, I'm the only one kind of outside.",
+        "labels": {
+          "client_talk_type": "change"
+        }
+      },
+      {
+        "role": "therapist",
+        "text": "Okay. What do you think you'll miss most about it?",
+        "labels": {
+          "main_therapist_behaviour": "question",
+          "reflection": "none",
+          "question": "open",
+          "therapist_input": "none"
+        }
+      },
+      {
+        "role": "client",
+        "text": "The-- Um, it takes away a lot of my stresses.",
+        "labels": {
+          "client_talk_type": "sustain"
+        }
+      }
+    ]
+  }
+]

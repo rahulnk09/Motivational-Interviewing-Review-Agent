@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local configuration (copy from .env.sample)
+.env
+
+# Cached Content Understanding / evaluation outputs
+data/output/
+mi_project/data/output/
+
+# Session recordings (large, third-party video content)
+mi_project/data/*.mp4
