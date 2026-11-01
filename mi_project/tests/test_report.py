@@ -27,7 +27,7 @@ def _output(**kw):
         collaboration=GlobalRating(justification="Shared agenda [T0, T2].", evidence_turn_ids=[0], score=3.5),
         strengths=[Strength(title="Reflection", skill="complex_reflection", insight="At [T2] you deepened it.", turn_ids=[1, 2])],
         improvements=[Improvement(title="Bad cite", trap="other", insight="x", turn_ids=[1, 42], better_response="y")],
-        overall_summary="Solid [T0].",
+        overall_summary="Solid [T0], then at T2 you reflected; T9 is unknown.",
         coaching_tips=["Reflect more after [T1]."],
     )
     return SupervisorOutput(**(base | kw))
@@ -52,5 +52,6 @@ def test_report_resolves_timestamps_quotes_and_turn_refs():
     assert report.empathy.justification == "Good listening at [01:15]."
     assert report.collaboration.justification == "Shared agenda [00:41, 01:15]."
     assert report.coaching_tips == ["Reflect more after [00:58]."]
+    assert report.overall_summary == "Solid [00:41], then at 01:15 you reflected; T9 is unknown."
     assert report.transcript[1].client_code.talk_type == "change"
     assert report.usage.input_tokens == 10 and report.usage.total_seconds == 1.6

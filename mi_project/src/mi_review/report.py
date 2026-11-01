@@ -116,11 +116,17 @@ def build_report(
     turns = {t.turn_id: t for t in transcript.turns}
 
     def refs(text: str) -> str:
-        """Replace [T12] / [T12, T14] turn references with their timestamps."""
+        """Replace turn references ([T12], [T12, T14], bare T12) with their timestamps."""
         def stamp(match: re.Match) -> str:
             ids = [int(i) for i in re.findall(r"\d+", match.group(0))]
             return "[" + ", ".join(format_ms(turns[i].start_ms) for i in ids if i in turns) + "]"
-        return re.sub(r"\[T\d+(?:\s*(?:,|and|-)\s*T?\d+)*\]", stamp, text)
+
+        def bare(match: re.Match) -> str:
+            i = int(match.group(1))
+            return format_ms(turns[i].start_ms) if i in turns else match.group(0)
+
+        text = re.sub(r"\[T\d+(?:\s*(?:,|and|-)\s*T?\d+)*\]", stamp, text)
+        return re.sub(r"\bT(\d+)\b", bare, text)
 
     def evidence(ids: list[int]) -> list[Evidence]:
         return [Evidence(turn_id=i, role=turns[i].role, start_ms=turns[i].start_ms, timestamp=format_ms(turns[i].start_ms), quote=turns[i].text) for i in ids]
