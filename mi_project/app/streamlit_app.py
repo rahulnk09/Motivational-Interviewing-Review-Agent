@@ -1,4 +1,4 @@
-"""MIFlow: Motivational Interviewing session review. Run: uv run streamlit run mi_project/app/streamlit_app.py"""
+"""MI Review Coach: Motivational Interviewing session review. Run: uv run streamlit run mi_project/app/streamlit_app.py"""
 
 import hashlib
 
@@ -16,7 +16,7 @@ PRESETS = {
     "annomi_video_27.mp4": (0.0, None),
 }
 
-st.set_page_config(page_title="MIFlow · MI session review", page_icon=":material/psychology:", layout="wide")
+st.set_page_config(page_title="MI Review Coach", page_icon=":material/psychology:", layout="wide")
 st.session_state.setdefault("report", None)
 st.session_state.setdefault("media", None)
 st.session_state.setdefault("seek_s", None)
@@ -85,7 +85,7 @@ with st.sidebar:
                f"Content Understanding analyzer: {s.cu_analyzer_id}")
 
 # ---------------- Header ----------------
-st.title("MIFlow", anchor=False)
+st.title("MI Review Coach", anchor=False)
 st.caption("Motivational Interviewing review: Azure Content Understanding transcribes the session, a Coder agent tags every turn "
            "(AnnoMI / MITI 4.2.1), and a Supervisor agent rates empathy and collaboration with timestamped feedback.")
 

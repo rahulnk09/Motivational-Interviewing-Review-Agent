@@ -1,7 +1,7 @@
 [project]
 name = "mi-review"
 version = "0.1.0"
-description = "MIFlow: Motivational Interviewing session review with Azure Content Understanding and LLM agents"
+description = "MI Review Coach: Motivational Interviewing session review with Azure Content Understanding and LLM agents"
 requires-python = ">=3.13"
 dependencies = [
     "azure-ai-contentunderstanding>=1.1.0",

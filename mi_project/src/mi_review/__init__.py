@@ -1,1 +1,1 @@
-"""MIFlow: Motivational Interviewing session review."""
+"""MI Review Coach: Motivational Interviewing session review."""

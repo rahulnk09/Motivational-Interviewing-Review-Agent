@@ -16,5 +16,11 @@ wheels/
 data/output/
 mi_project/data/output/
 
+
+.zip
 # Session recordings (large, third-party video content)
 mi_project/data/*.mp4
+mi_project/data/uploads/
+
+# Test caches
+.pytest_cache/

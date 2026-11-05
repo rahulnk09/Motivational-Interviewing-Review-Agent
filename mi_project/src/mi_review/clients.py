@@ -5,6 +5,7 @@ import ssl
 from functools import lru_cache
 
 from azure.ai.contentunderstanding import ContentUnderstandingClient
+from azure.core.credentials import AzureKeyCredential
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from openai import DefaultHttpx2Client, OpenAI
 
@@ -47,7 +48,8 @@ def credential() -> DefaultAzureCredential:
 def cu_client() -> ContentUnderstandingClient:
     settings = get_settings()
     kwargs = {"transport": _requests_transport()} if settings.relax_x509_strict else {}
-    return ContentUnderstandingClient(endpoint=settings.cu_endpoint, credential=credential(), **kwargs)
+    cred = AzureKeyCredential(settings.cu_api_key) if settings.cu_api_key else credential()
+    return ContentUnderstandingClient(endpoint=settings.cu_endpoint, credential=cred, **kwargs)
 
 
 @lru_cache
@@ -56,7 +58,7 @@ def openai_client() -> OpenAI:
     http_client = DefaultHttpx2Client(verify=_tls_context()) if settings.relax_x509_strict else None
     return OpenAI(
         base_url=f"{settings.aoai_endpoint.rstrip('/')}/openai/v1/",
-        api_key=get_bearer_token_provider(credential(), COGNITIVE_SCOPE),
+        api_key=settings.aoai_api_key or get_bearer_token_provider(credential(), COGNITIVE_SCOPE),
         http_client=http_client,
         max_retries=3,
         timeout=300,

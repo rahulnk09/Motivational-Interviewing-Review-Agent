@@ -60,11 +60,22 @@ def analyzer_definition() -> ContentAnalyzer:
     settings = get_settings()
     return ContentAnalyzer(
         base_analyzer_id=settings.cu_base_analyzer,
-        description="MIFlow: diarized transcript plus session metadata for motivational interviewing review",
+        description="MI Review Coach: diarized transcript plus session metadata for motivational interviewing review",
         config=ContentAnalyzerConfig(return_details=True, locales=list(settings.cu_locales)),
         field_schema=FIELD_SCHEMA,
         models={"completion": settings.cu_completion_model},
     )
+
+
+def ensure_model_defaults() -> str:
+    """Map CU's completion model name to your deployment (resource-wide setting; other mappings are kept)."""
+    settings = get_settings()
+    current = dict(cu_client().get_defaults().model_deployments or {})
+    if current.get(settings.cu_completion_model) == settings.cu_completion_deployment:
+        return f"{settings.cu_completion_model} -> {settings.cu_completion_deployment} (already set)"
+    current[settings.cu_completion_model] = settings.cu_completion_deployment
+    cu_client().update_defaults(model_deployments=current)
+    return f"{settings.cu_completion_model} -> {settings.cu_completion_deployment} (updated)"
 
 
 def ensure_analyzer(replace: bool = False) -> str:

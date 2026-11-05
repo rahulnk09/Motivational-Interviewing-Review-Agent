@@ -32,18 +32,27 @@ def _ids(raw: str | None) -> tuple[int, ...]:
     return tuple(int(x) for x in (raw or "").split(",") if x.strip())
 
 
+def _effort(name: str, default: str) -> str | None:
+    # "none" disables the reasoning parameter (for non-reasoning models such as gpt-4.1)
+    value = _env(name, default)
+    return None if value.lower() == "none" else value
+
+
 @dataclass(frozen=True)
 class Settings:
     cu_endpoint: str | None
     aoai_endpoint: str | None
+    cu_api_key: str | None
+    aoai_api_key: str | None
     cu_analyzer_id: str
     cu_base_analyzer: str
     cu_completion_model: str
+    cu_completion_deployment: str
     cu_locales: tuple[str, ...]
     coder_deployment: str
-    coder_effort: str
+    coder_effort: str | None
     supervisor_deployment: str
-    supervisor_effort: str
+    supervisor_effort: str | None
     relax_x509_strict: bool
     reserved_annomi_ids: tuple[int, ...]
 
@@ -57,15 +66,19 @@ def get_settings() -> Settings:
     return Settings(
         cu_endpoint=_env("CONTENTUNDERSTANDING_ENDPOINT"),
         aoai_endpoint=_env("AZURE_OPENAI_ENDPOINT"),
+        # Optional: API keys instead of Entra ID (az login)
+        cu_api_key=_env("CONTENTUNDERSTANDING_API_KEY"),
+        aoai_api_key=_env("AZURE_OPENAI_API_KEY"),
         cu_analyzer_id=_env("MI_CU_ANALYZER_ID", "miSessionAudio"),
         cu_base_analyzer=_env("MI_CU_BASE_ANALYZER", "prebuilt-audio"),
         cu_completion_model=_env("CU_COMPLETION_MODEL", "gpt-5.4-mini"),
+        cu_completion_deployment=_env("CU_COMPLETION_DEPLOYMENT") or _env("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-5.4-mini"),
         cu_locales=tuple(_env("MI_CU_LOCALES", "en-US").split(",")),
         # eval-coder: gpt-5.4/low beat gpt-5.4-mini/low on therapist codes (kappa 0.86 vs 0.76)
         coder_deployment=_env("MI_CODER_DEPLOYMENT") or _env("AZURE_OPENAI_PREMIUM_DEPLOYMENT", "gpt-5.4"),
-        coder_effort=_env("MI_CODER_EFFORT", "low"),
+        coder_effort=_effort("MI_CODER_EFFORT", "low"),
         supervisor_deployment=_env("MI_SUPERVISOR_DEPLOYMENT") or _env("AZURE_OPENAI_PREMIUM_DEPLOYMENT", "gpt-5.4"),
-        supervisor_effort=_env("MI_SUPERVISOR_EFFORT", "medium"),
+        supervisor_effort=_effort("MI_SUPERVISOR_EFFORT", "medium"),
         relax_x509_strict=_env("MI_RELAX_X509_STRICT", "0") == "1",
         # AnnoMI transcripts whose videos are used for end-to-end tests; never used as few-shot examples
         reserved_annomi_ids=_ids(_env("MI_RESERVED_ANNOMI_IDS", "27")),

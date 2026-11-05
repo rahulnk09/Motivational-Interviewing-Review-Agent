@@ -35,6 +35,7 @@ def cmd_doctor(_args) -> int:
     print(f"  CU analyzer={s.cu_analyzer_id} base={s.cu_base_analyzer} completion_model={s.cu_completion_model} locales={s.cu_locales}")
     print(f"  coder={s.coder_deployment}/{s.coder_effort} supervisor={s.supervisor_deployment}/{s.supervisor_effort}")
     print(f"  relax_x509_strict={s.relax_x509_strict} reserved_annomi_ids={s.reserved_annomi_ids}")
+    print(f"  auth: CU={'API key' if s.cu_api_key else 'Entra ID'}, OpenAI={'API key' if s.aoai_api_key else 'Entra ID'}")
     if s.missing():
         print(f"  FAIL missing env vars: {', '.join(s.missing())}")
         return 1
@@ -42,7 +43,7 @@ def cmd_doctor(_args) -> int:
     def cu_defaults():
         mapping = cu_client().get_defaults().model_deployments or {}
         if s.cu_completion_model not in mapping:
-            raise RuntimeError(f"{s.cu_completion_model} not mapped in CU defaults: {mapping}")
+            raise RuntimeError(f"{s.cu_completion_model} not mapped in CU defaults (run setup-analyzer): {mapping}")
         return f"{s.cu_completion_model} -> {mapping[s.cu_completion_model]}"
 
     def custom_analyzer():
@@ -62,8 +63,10 @@ def cmd_doctor(_args) -> int:
         return _run
 
     print("Checks:")
-    results = [
-        _check("Entra ID token (az login)", lambda: credential().get_token(COGNITIVE_SCOPE) and None),
+    results = []
+    if not (s.cu_api_key and s.aoai_api_key):
+        results.append(_check("Entra ID token (az login)", lambda: credential().get_token(COGNITIVE_SCOPE) and None))
+    results += [
         _check("CU prebuilt-audio analyzer", lambda: cu_client().get_analyzer("prebuilt-audio").analyzer_id),
         _check("CU model deployment defaults", cu_defaults),
         _check("CU custom analyzer", custom_analyzer),
@@ -74,8 +77,9 @@ def cmd_doctor(_args) -> int:
 
 
 def cmd_setup_analyzer(args) -> int:
-    from .ingest import ensure_analyzer
+    from .ingest import ensure_analyzer, ensure_model_defaults
 
+    print(f"CU model mapping: {ensure_model_defaults()}")
     status = ensure_analyzer(replace=args.replace)
     print(f"Analyzer {get_settings().cu_analyzer_id}: {status}")
     return 0
