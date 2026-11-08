@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MIRA · MI Review App · PhoenixAI</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="vendor/reveal/reset.css">
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+  <link rel="stylesheet" href="css/deck.css">
+  <link rel="stylesheet" href="css/slides.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ================= S1 · TITLE ================= -->
+<section id="s1" data-bg="dark" data-progress="none">
+  <div class="frame dark hero">
+    <div class="hero-mark">MIRA</div>
+    <div class="hero-sub">MI Review App: expert-grade coaching from any counselling recording</div>
+    <div class="motif" data-motif="large"></div>
+    <div class="hero-meta">
+      <div class="hero-team">Team <b>PhoenixAI</b> · Rahul Nakka · Deependra Shekhawat</div>
+      <div class="hero-tech">Azure Content Understanding · Azure OpenAI in Microsoft Foundry · LangGraph · Streamlit</div>
+    </div>
+  </div>
+  <aside class="notes">We built MIRA, an AI reviewer for Motivational Interviewing conversations. Let me start with two clips.</aside>
+</section>
+
+<!-- ================= S2 · HOOK ================= -->
+<section id="s2" data-bg="dark" data-progress="Why">
+  <div class="frame dark">
+    <h2 class="hook-title">Same goal. Same three minutes. Opposite outcomes.</h2>
+    <div class="hook">
+      <div class="hook-col fragment rise" data-fragment-index="0">
+        <div class="hook-head coral"><span class="ms">pulmonology</span>Session A · asthma</div>
+        <div class="bubble clin"><div class="who">Clinician <span class="ts">▶ 02:58</span></div>“If Oscar's that important to you… do you put Oscar higher than your baby, than your wife?”</div>
+        <div class="bubble client"><div class="who">Client <span class="ts">▶ 03:12</span></div>“I don't think you get my situation. I've had this dog for 12 years.”</div>
+        <div class="hook-stat coral fragment rise" data-fragment-index="2"><span class="v">0%</span><span class="l">client change talk</span></div>
+      </div>
+      <div class="hook-divider"></div>
+      <div class="hook-col fragment rise" data-fragment-index="1">
+        <div class="hook-head teal"><span class="ms">vaping_rooms</span>Session B · vaping</div>
+        <div class="bubble clin"><div class="who">Clinician <span class="ts">▶ 02:59</span></div>“What would you like to do moving forward in terms of vaping?”</div>
+        <div class="bubble client"><div class="who">Client <span class="ts">▶ 03:09</span></div>“…maybe I could try to, like, cut back a little bit.”</div>
+        <div class="hook-stat teal fragment rise" data-fragment-index="2"><span class="v">83%</span><span class="l">client change talk</span></div>
+      </div>
+    </div>
+    <p class="foot hook-foot">Public role-play demonstrations (AnnoMI #27; “MI in Action” role-play). Scored by MIRA.</p>
+  </div>
+  <aside class="notes">Two clinicians, same goal: a healthier client. Left: the clinician argues ("do you put your dog above your baby?") and the client digs in. Right: "What would you like to do?" and the client says "maybe I could cut back". 0% vs 83% change talk. The difference is a learnable conversational skill.</aside>
+</section>
+
+<!-- ================= S3 · FEEDBACK GAP ================= -->
+<section id="s3" data-progress="Why">
+  <div class="frame">
+    <h2 class="title">MI skills fade without feedback, and expert feedback doesn't scale.</h2>
+    <div class="body">
+      <div class="row grow s3-row">
+        <div class="loop">
+          <svg class="loop-svg" viewBox="0 0 960 660" width="960" height="660" aria-hidden="true">
+            <defs>
+              <marker id="ah-ink" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0D9488"/></marker>
+              <marker id="ah-coral" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#EF6351"/></marker>
+            </defs>
+            <path d="M523.7 98.2 A250 250 0 0 1 661.8 236.4" class="arc" marker-end="url(#ah-ink)"/>
+            <path d="M661.8 423.6 A250 250 0 0 1 627.0 483.9" class="arc broken"/>
+            <path d="M583.9 527.0 A250 250 0 0 1 523.7 561.8" class="arc broken" marker-end="url(#ah-coral)"/>
+            <path d="M336.3 561.8 A250 250 0 0 1 198.2 423.6" class="arc" marker-end="url(#ah-ink)"/>
+            <path d="M198.2 236.4 A250 250 0 0 1 336.3 98.2" class="arc" marker-end="url(#ah-ink)"/>
+          </svg>
+          <div class="node" style="left:430px;top:80px"><span class="ms">fitness_center</span>Practise</div>
+          <div class="node" style="left:680px;top:330px"><span class="ms">videocam</span>Record</div>
+          <div class="node bad" style="left:430px;top:580px"><span class="ms">fact_check</span>Code &amp; review</div>
+          <div class="node" style="left:180px;top:330px"><span class="ms">school</span>Coach</div>
+          <div class="loop-gap" style="left:607px;top:507px"><span class="ms">hourglass_top</span></div>
+          <div class="loop-label">trained MITI coders<br>hours per session<br>scarce</div>
+          <div class="loop-center"><div class="serif">The coaching loop</div><div class="coral">breaks at review</div></div>
+        </div>
+        <div class="col grow s3-cards">
+          <div class="card quote-card"><span class="icon-badge"><span class="ms">school</span></span><p>“Workshops alone don't make clinicians proficient; feedback and coaching do.”</p><div class="cite">Miller et al., 2004</div></div>
+          <div class="card quote-card"><span class="icon-badge coral"><span class="ms">trending_down</span></span><p>“Training gains fade within months without follow-up coaching.”</p><div class="cite">Schwalbe et al., 2014</div></div>
+        </div>
+      </div>
+      <div class="callout amber"><span class="ms">warning</span>Most sessions are never reviewed, so clinicians never learn which words worked.</div>
+    </div>
+  </div>
+  <aside class="notes">Clinicians learn MI from feedback. Feedback means a trained coder reviewing a recording turn by turn, which takes hours. So it rarely happens, and skills fade within months without it. Most sessions are never reviewed.</aside>
+</section>
+
+<!-- ================= S4 · USERS + PROMISES ================= -->
+<section id="s4" data-progress="Why">
+  <div class="frame">
+    <h2 class="title">Built for three users, around five promises.</h2>
+    <div class="body">
+      <div class="row personas">
+        <div class="card persona"><div class="p-head"><span class="icon-badge"><span class="ms">medical_services</span></span><h3>Clinician / trainee</h3></div><p class="serif-q">“What did I say that worked, and what should I say instead?”</p></div>
+        <div class="card persona"><div class="p-head"><span class="icon-badge"><span class="ms">supervisor_account</span></span><h3>Supervisor / MI trainer</h3></div><p class="serif-q">“I can review only a few sessions, and scoring is slow and subjective.”</p></div>
+        <div class="card persona"><div class="p-head"><span class="icon-badge"><span class="ms">monitoring</span></span><h3>Programme lead</h3></div><p class="serif-q">“Is our MI training changing how we talk to patients?”</p></div>
+      </div>
+      <div class="eyebrow">Our five promises</div>
+      <div class="promises">
+        <div class="promise"><span class="pnum">1</span><span class="ms chk">radio_button_unchecked</span><span class="ms pi">rule</span><b>Standards-based</b><span>MITI 4.2.1</span></div>
+        <div class="promise"><span class="pnum">2</span><span class="ms chk">radio_button_unchecked</span><span class="ms pi">link</span><b>Grounded</b><span>every claim → timestamp</span></div>
+        <div class="promise"><span class="pnum">3</span><span class="ms chk">radio_button_unchecked</span><span class="ms pi">lightbulb</span><b>Actionable</b><span>what to say instead</span></div>
+        <div class="promise"><span class="pnum">4</span><span class="ms chk">radio_button_unchecked</span><span class="ms pi">bolt</span><b>Fast &amp; affordable</b><span>~1 minute, cents</span></div>
+        <div class="promise"><span class="pnum">5</span><span class="ms chk">radio_button_unchecked</span><span class="ms pi">verified</span><b>Measured</b><span>tested vs experts</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Three users: the clinician who wants to know what to say next time, the supervisor who can only review a handful of sessions, and the programme lead who needs proof that training works. Five promises; we check them off at the end.</aside>
+</section>
+
+<!-- ================= S5 · SPIRIT + FOUR PROCESSES ================= -->
+<section id="s5" data-progress="MI">
+  <div class="frame">
+    <h2 class="title">Good MI: a collaborative stance, moving through four steps.</h2>
+    <div class="body">
+      <div class="spirit">
+        <div class="eyebrow">MI spirit</div>
+        <div class="sp"><span class="ms">handshake</span><b>Partnership</b><span>client is the expert</span></div>
+        <div class="sp"><span class="ms">favorite</span><b>Acceptance</b><span>respect autonomy</span></div>
+        <div class="sp"><span class="ms">volunteer_activism</span><b>Compassion</b><span>client's interest first</span></div>
+        <div class="sp"><span class="ms">emoji_objects</span><b>Evocation</b><span>draw out their reasons</span></div>
+      </div>
+      <div class="stairs grow">
+        <div class="stair s1"><div class="bubble clin sm"><div class="who">Clinician <span class="ts">▶ 00:41</span></div>“I'm so glad that you came in today… this is a judgment-free zone.”</div><div class="step"><span class="n">1</span><b>Engaging</b><span>build trust</span></div></div>
+        <div class="stair s2"><div class="bubble clin sm"><div class="who">Clinician <span class="ts">▶ 00:41</span></div>“Can you tell me about your experience with vaping?”</div><div class="step"><span class="n">2</span><b>Focusing</b><span>agree the topic</span></div></div>
+        <div class="stair s3"><div class="bubble clin sm"><div class="who">Clinician <span class="ts">▶ 02:01</span></div>“Can we talk about what some of the pros and cons of vaping are for you?”</div><div class="step"><span class="n">3</span><b>Evoking</b><span>draw out her reasons</span></div></div>
+        <div class="stair s4"><div class="bubble clin sm"><div class="who">Clinician <span class="ts">▶ 02:59</span></div>“What would you like to do moving forward?”</div><div class="step"><span class="n">4</span><b>Planning</b><span>her own next step</span></div></div>
+      </div>
+      <p class="foot">Miller &amp; Rollnick, <i>Motivational Interviewing</i> (2013) · MINT: Motivational Interviewing Network of Trainers · Quotes: Mia's session</p>
+    </div>
+  </div>
+  <aside class="notes">MI is a stance: partnership, acceptance, compassion, evocation. The client is the expert. Mia's clinician hits all four steps: welcome, focus on vaping, evoke her own pros and cons, let her choose the next step.</aside>
+</section>
+
+<!-- ================= S6 · OARS ================= -->
+<section id="s6" data-progress="MI">
+  <div class="frame">
+    <h2 class="title">Four micro-skills carry the conversation: OARS.</h2>
+    <div class="body">
+      <div class="oars grow">
+        <div class="card oar"><div class="L">O</div><h3>Open questions</h3>
+          <div class="ex bad"><span class="ms">close</span><div>“Do you vape every day?” <span class="chip">CQ</span></div></div>
+          <div class="ex good"><span class="ms">check</span><div>“How does vaping fit into all this for you?” <span class="chip">OQ</span></div></div>
+          <div class="feeds"><span class="ms">analytics</span>feeds % open questions</div>
+        </div>
+        <div class="card oar"><div class="L">A</div><h3>Affirmations</h3>
+          <div class="ex"><div>“It says a lot about who you are… that you're thinking about the impact.” <span class="chip">AF</span></div></div>
+          <p class="hint">Name real strengths and efforts.</p>
+          <div class="feeds"><span class="ms">analytics</span>feeds % MI-adherent</div>
+        </div>
+        <div class="card oar core"><div class="ribbon">core skill</div><div class="L">R</div><h3>Reflections</h3>
+          <div class="ex"><div><span class="mini-lbl">Simple</span>“Vaping helps you relax.” <span class="chip">SR</span></div></div>
+          <div class="ex"><div><span class="mini-lbl">Complex</span>“It helps you unwind, and it's starting to cost you on the court, which matters to you.” <span class="chip">CR</span></div></div>
+          <div class="feeds"><span class="ms">analytics</span>feeds R:Q and % complex</div>
+        </div>
+        <div class="card oar"><div class="L">S</div><h3>Summaries</h3>
+          <div class="ex"><div>“Gather the threads, then move forward.”</div></div>
+          <p class="hint">Collect what the client said, then transition.</p>
+          <div class="feeds"><span class="ms">analytics</span>coded as a complex reflection</div>
+        </div>
+      </div>
+      <div class="callout teal"><span class="ms">insights</span>Experts look for more reflections than questions, and deeper (complex) reflections.</div>
+    </div>
+  </div>
+  <aside class="notes">Four micro-skills: open questions, affirmations, reflections and summaries. Reflections are the core. A simple reflection repeats; a complex one adds meaning. Experts want more reflections than questions.</aside>
+</section>
+
+<!-- ================= S7 · CHANGE TALK + TRAPS ================= -->
+<section id="s7" data-progress="MI">
+  <div class="frame">
+    <h2 class="title">Clients talk themselves into change, or out of it.</h2>
+    <div class="body">
+      <div class="tug">
+        <div class="tug-side sustain">
+          <div class="tug-head coral"><span class="ms">arrow_back</span>Sustain talk</div>
+          <div class="bubble client sm"><div class="who">Client <span class="chips"><span class="chip st">ST</span></span></div>“It helps me relax.”</div>
+          <div class="bubble client sm"><div class="who">Client <span class="chips"><span class="chip st">ST</span></span></div>“I don't think I'm addicted.”</div>
+        </div>
+        <div class="tug-mid">
+          <div class="tug-head slate">Neutral</div>
+          <p>facts, background, small talk</p>
+          <span class="chip n">N</span>
+        </div>
+        <div class="tug-side change">
+          <div class="tug-head teal">Change talk<span class="ms">arrow_forward</span></div>
+          <div class="bubble client sm"><div class="who">Client <span class="chips"><span class="chip ct">CT</span></span></div>“I felt out of breath and super tired.”</div>
+          <div class="bubble client sm"><div class="who">Client <span class="chips"><span class="chip ct">CT</span></span></div>“Maybe I could try to cut back.”</div>
+        </div>
+      </div>
+      <div class="rope"><span class="rope-l">status quo</span><span class="knot"></span><span class="rope-r">change</span></div>
+      <div class="darn"><span class="lbl teal">Change talk sounds like:</span><span class="chip soft-teal">Desire</span><span class="chip soft-teal">Ability</span><span class="chip soft-teal">Reasons</span><span class="chip soft-teal">Need</span><span class="chip soft-teal">Commitment</span><span class="chip soft-teal">Activation</span><span class="chip soft-teal">Taking steps</span></div>
+      <div class="traps-row">
+        <div class="traps">
+          <div class="eyebrow">Traps that create sustain talk</div>
+          <div class="trap-chips"><span class="chip soft-coral">Expert</span><span class="chip soft-coral">Question–answer</span><span class="chip soft-coral">Premature focus</span><span class="chip soft-coral">Labelling / blaming</span><span class="chip soft-coral">Persuasion without permission</span></div>
+        </div>
+        <div class="card trap-card tight sal-trap">
+          <div class="tc-head"><b>Confrontation–denial</b><span class="ts">▶ 02:58</span></div>
+          <p class="serif-q">“Do you put Oscar higher than your baby?”</p>
+          <p class="muted small">Sal's clinician argued for change, so the client defended the dog.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">'I felt out of breath' is change talk, and people believe what they hear themselves say. 'It helps me relax' is sustain talk. Clinicians create sustain talk by falling into traps: lecturing, interrogating, arguing. Sal's clinician fell into the confrontation trap.</aside>
+</section>
+
+<!-- ================= S8 · SIX METRICS ================= -->
+<section id="s8" data-progress="Measure">
+  <div class="frame">
+    <h2 class="title">We score on MITI 4.2.1: six metrics, each with a basic and an advanced bar.</h2>
+    <div class="body">
+      <div class="row grow s8-row">
+        <div class="lenses">
+          <div class="eyebrow">Two lenses</div>
+          <div class="card lens"><span class="icon-badge"><span class="ms">zoom_in</span></span><h3>Every turn</h3><p>Behaviour counts: questions, reflections, MI-adherent or not; client change / sustain talk.</p></div>
+          <div class="card lens"><span class="icon-badge"><span class="ms">travel_explore</span></span><h3>Whole session</h3><p>Global ratings: Empathy and Partnership, 1–5.</p></div>
+        </div>
+        <div class="metrics grow">
+          <div class="card mt">
+            <div class="mt-head"><b>Empathy (1–5)</b><span class="tag ai">AI-rated</span></div>
+            <div class="mt-f">Supervisor rating</div>
+            <div class="mt-main"><div class="mt-val teal"><small>Mia</small>3.5</div><div class="bar"><i class="tk basic" style="left:62.5%"></i><i class="tk adv" style="left:75%"></i><i class="dot" style="left:62.5%"></i><span class="lo">1</span><span class="hi">5</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic ≥ 3.5</span><span class="teal">Advanced ≥ 4.0</span></div>
+          </div>
+          <div class="card mt">
+            <div class="mt-head"><b>Collaboration (1–5)</b><span class="tag ai">AI-rated</span></div>
+            <div class="mt-f">Supervisor rating</div>
+            <div class="mt-main"><div class="mt-val teal"><small>Mia</small>3.5</div><div class="bar"><i class="tk basic" style="left:62.5%"></i><i class="tk adv" style="left:75%"></i><i class="dot" style="left:62.5%"></i><span class="lo">1</span><span class="hi">5</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic ≥ 3.5</span><span class="teal">Advanced ≥ 4.0</span></div>
+          </div>
+          <div class="card mt">
+            <div class="mt-head"><b>Reflection : Question</b><span class="tag py">Python</span></div>
+            <div class="mt-f">reflections ÷ questions</div>
+            <div class="mt-main"><div class="mt-val coral"><small>Mia</small>0.50</div><div class="bar"><i class="tk basic" style="left:40%"></i><i class="tk adv" style="left:80%"></i><i class="dot below" style="left:20%"></i><span class="lo">0</span><span class="hi">2.5</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic ≥ 1.0</span><span class="teal">Advanced ≥ 2.0</span></div>
+          </div>
+          <div class="card mt">
+            <div class="mt-head"><b>% Open questions</b><span class="tag py">Python</span></div>
+            <div class="mt-f">open ÷ all questions</div>
+            <div class="mt-main"><div class="mt-val teal"><small>Mia</small>100%</div><div class="bar"><i class="tk basic" style="left:40%"></i><i class="tk adv" style="left:50%"></i><i class="dot" style="left:100%"></i><span class="lo">0</span><span class="hi">100%</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic &gt; 40%</span><span class="teal">Advanced &gt; 50%</span></div>
+          </div>
+          <div class="card mt">
+            <div class="mt-head"><b>% Complex reflections</b><span class="tag py">Python</span></div>
+            <div class="mt-f">complex ÷ all reflections</div>
+            <div class="mt-main"><div class="mt-val teal"><small>Mia</small>100%</div><div class="bar"><i class="tk basic" style="left:40%"></i><i class="tk adv" style="left:50%"></i><i class="dot" style="left:100%"></i><span class="lo">0</span><span class="hi">100%</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic &gt; 40%</span><span class="teal">Advanced &gt; 50%</span></div>
+          </div>
+          <div class="card mt">
+            <div class="mt-head"><b>% MI-adherent</b><span class="tag py">Python</span></div>
+            <div class="mt-f">adherent ÷ (adherent + non-adherent)</div>
+            <div class="mt-main"><div class="mt-val teal"><small>Mia</small>100%</div><div class="bar"><i class="tk basic" style="left:90%"></i><i class="tk adv" style="left:100%"></i><i class="dot" style="left:100%"></i><span class="lo">0</span><span class="hi">100%</span></div></div>
+            <div class="mt-legend"><span class="amber">Basic ≥ 90%</span><span class="teal">Advanced 100%</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="foot">MITI 4.2.1 (Moyers, Manuel &amp; Ernst). Ratings use half-points so 3.5 is reachable. Dots show Mia's session.</p>
+    </div>
+  </div>
+  <aside class="notes">MITI 4.2.1 has two lenses: code every turn, and rate the whole session. Six metrics, each with a basic and an advanced bar. Four are plain arithmetic, two are expert-style ratings. Mia's clinician is excellent on open questions but asks twice as many questions as she reflects.</aside>
+</section>
+
+<!-- ================= S9 · SCORE + CHANGE TALK ================= -->
+<section id="s9" data-progress="Measure">
+  <div class="frame">
+    <h2 class="title">Six metrics become one score, and the client's words show if it worked.</h2>
+    <div class="body">
+      <div class="row grow s9-row">
+        <div class="score-side">
+          <div class="eyebrow">MI proficiency score · 6 metrics × up to 2 points</div>
+          <div class="scale">
+            <div class="markers">
+              <div class="mk coral" style="left:calc(100% / 13 * 0.5)"><span>Sal 0</span><i></i></div>
+              <div class="mk teal" style="left:calc(100% / 13 * 8.5)"><span>Mia 8</span><i></i></div>
+            </div>
+            <div class="cells">
+              <span class="d">0</span><span class="d">1</span><span class="d">2</span><span class="d">3</span><span class="d">4</span><span class="d">5</span><span class="d">6</span>
+              <span class="bsc">7</span><span class="bsc">8</span><span class="bsc">9</span><span class="adv">10</span><span class="adv">11</span><span class="adv">12</span>
+            </div>
+            <div class="bands"><span class="coral" style="flex:7">Developing 0–6</span><span class="amber" style="flex:3">Basic 7–9</span><span class="teal" style="flex:3">Advanced 10–12</span></div>
+          </div>
+          <div class="eyebrow">Mia's breakdown</div>
+          <div class="breakdown">
+            <div class="pt p1"><b>1</b><span>Empathy</span></div>
+            <div class="pt p1"><b>1</b><span>Collaboration</span></div>
+            <div class="pt p0"><b>0</b><span>R:Q</span></div>
+            <div class="pt p2"><b>2</b><span>% Open Q</span></div>
+            <div class="pt p2"><b>2</b><span>% Complex</span></div>
+            <div class="pt p2"><b>2</b><span>% Adherent</span></div>
+            <div class="pt-eq">=</div>
+            <div class="pt-total"><b>8 / 12</b><span>Basic proficiency</span></div>
+          </div>
+        </div>
+        <div class="ct-side">
+          <div class="card formula"><div class="eyebrow">Client impact</div><div class="f">Change talk ratio = <span class="teal">change</span> ÷ (<span class="teal">change</span> + <span class="coral">sustain</span>)</div></div>
+          <div class="donuts">
+            <div class="donut"><div class="dwrap"><canvas id="chart-sal"></canvas><div class="dval coral">0%</div></div><div class="dlbl"><b class="coral">Sal</b> 0 change · all sustain</div></div>
+            <div class="donut"><div class="dwrap"><canvas id="chart-mia"></canvas><div class="dval teal">83%</div></div><div class="dlbl"><b class="teal">Mia</b> 5 change · 1 sustain</div></div>
+          </div>
+          <p class="foot">Client-impact indicator, not part of the 12 points. Neutral turns are excluded.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Each metric is worth up to 2 points, 12 in total. Mia's clinician scores 8, Basic proficiency; Sal's scores 0. Separately, the change talk ratio tells us whether it worked for the client: 83% versus 0%.</aside>
+</section>
+
+<!-- ================= S10 · PIPELINE ================= -->
+<section id="s10" data-progress="MIRA">
+  <div class="frame">
+    <h2 class="title">MIRA: Azure listens, two agents think, Python does the math.</h2>
+    <div class="body">
+      <div class="io-row"><span class="io"><span class="ms">movie</span>Video / audio in</span><span class="ms io-arrow">arrow_forward</span><span class="io mira">MIRA</span><span class="ms io-arrow">arrow_forward</span><span class="io"><span class="ms">assignment</span>Score · ratings · timestamped feedback · coded transcript</span></div>
+      <div class="lg-bracket"><span>LangGraph orchestration</span></div>
+      <div class="pipe">
+        <div class="pn azure fragment rise" data-fragment-index="0"><div class="pn-top"><span class="ms">graphic_eq</span><span class="k">1 · Listen</span></div><b>Azure Content Understanding</b><p>Diarized transcript, ms timestamps, clinician speaker, target behaviour, summary</p></div>
+        <div class="pa fragment" data-fragment-index="1"><span class="ms">arrow_forward</span><span class="art">turns + timestamps</span></div>
+        <div class="pn agent fragment rise" data-fragment-index="1"><div class="pn-top"><span class="ms fill">auto_awesome</span><span class="k">2 · Code</span></div><b>Coder agent · gpt-5.4</b><p>MITI / AnnoMI codes for every turn</p></div>
+        <div class="pa fragment" data-fragment-index="2"><span class="ms">arrow_forward</span><span class="art">codes</span></div>
+        <div class="pn py fragment rise" data-fragment-index="2"><div class="pn-top"><span class="ms">code</span><span class="k">3 · Measure</span></div><b>Python rubric engine</b><p>Ratios, thresholds, points. No LLM.</p></div>
+        <div class="pa fragment" data-fragment-index="3"><span class="ms">arrow_forward</span><span class="art">metrics</span></div>
+        <div class="pn agent fragment rise" data-fragment-index="3"><div class="pn-top"><span class="ms fill">auto_awesome</span><span class="k">4 · Supervise</span></div><b>Supervisor agent · gpt-5.4</b><p>Empathy, Collaboration, strengths, traps, better responses</p></div>
+        <div class="pa fragment" data-fragment-index="4"><span class="ms">arrow_forward</span><span class="art">turn ids</span></div>
+        <div class="pn show fragment rise" data-fragment-index="4"><div class="pn-top"><span class="ms">dashboard</span><span class="k">5 · Show</span></div><b>Report + Streamlit</b><p>Turn ids → quotes + timestamps; ▶ seeks the video</p></div>
+      </div>
+      <div class="trust fragment rise" data-fragment-index="5">
+        <div class="card tight tb"><span class="icon-badge"><span class="ms">calculate</span></span><p>LLMs judge language; <b>Python does the math</b></p></div>
+        <div class="card tight tb"><span class="icon-badge"><span class="ms">link</span></span><p>Model cites turn ids; <b>code inserts quote + timestamp</b></p></div>
+        <div class="card tight tb"><span class="icon-badge"><span class="ms">data_object</span></span><p><b>Strict typed JSON</b>, validated, retried once</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Five stages. Content Understanding listens: transcript, who's the clinician, millisecond timestamps. The Coder labels every turn. Plain Python does all the math. The Supervisor rates empathy and collaboration and writes feedback. Trust rules: no LLM arithmetic; the model cites turn numbers and our code inserts the quote and timestamp; strict typed outputs.</aside>
+</section>
+
+<!-- ================= S11 · ANNOMI ================= -->
+<section id="s11" data-progress="MIRA">
+  <div class="frame">
+    <h2 class="title">AnnoMI: expert-labelled ground truth that powers MIRA four ways.</h2>
+    <div class="body">
+      <div class="row grow s11-row">
+        <div class="anno-left">
+          <div class="stats4">
+            <div class="stat"><div class="v">133</div><div class="l">transcripts</div></div>
+            <div class="stat"><div class="v">9,699</div><div class="l">utterances</div></div>
+            <div class="stat"><div class="v">10</div><div class="l">expert annotators</div></div>
+            <div class="stat"><div class="v">43</div><div class="l">topics</div></div>
+          </div>
+          <div class="quality">
+            <div class="eyebrow">Session quality</div>
+            <div class="qbar"><span class="hi" style="flex:110">110 high · 83%</span><span class="lo" style="flex:23">23 low</span></div>
+            <div class="qlegend"><span><i class="teal-dot"></i>expert-rated high-quality MI</span><span><i class="coral-dot"></i>low quality (17%)</span></div>
+          </div>
+        </div>
+        <div class="anno-hub grow">
+          <div class="hub"><span class="ms">database</span><b>AnnoMI</b></div>
+          <div class="jobs">
+            <div class="card tight job"><span class="icon-badge"><span class="ms">school</span></span><h3>Teaches the Coder</h3><p>22 few-shot examples covering all 15 labels</p></div>
+            <div class="card tight job"><span class="icon-badge"><span class="ms">tune</span></span><h3>Calibrates the Supervisor</h3><p>1 high- + 1 low-quality excerpt</p></div>
+            <div class="card tight job"><span class="icon-badge"><span class="ms">bar_chart</span></span><h3>Benchmarks clinicians</h3><p>High vs low medians on every metric</p></div>
+            <div class="card tight job"><span class="icon-badge"><span class="ms">fact_check</span></span><h3>Grades MIRA</h3><p>27 held-out transcripts</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="row s11-bottom">
+        <div class="callout teal grow"><span class="ms">verified</span>Only 2 transcripts ever appear in prompts, never in tests (unit-tested).</div>
+      </div>
+      <p class="foot">Wu et al., “Anno-MI: A Dataset of Expert-Annotated Counselling Dialogues”, ICASSP 2022.</p>
+    </div>
+  </div>
+  <aside class="notes">Our answer key is AnnoMI: 133 real MI demonstrations labelled by 10 experts. Four jobs: teaches the Coder, calibrates the Supervisor, benchmarks the clinician, grades MIRA. Only two transcripts ever go into prompts; the rest are kept strictly for testing.</aside>
+</section>
+
+<!-- ================= S12 · CODER ================= -->
+<section id="s12" data-progress="Agents">
+  <div class="frame">
+    <h2 class="title">The Coder learns from expert examples, not from retraining.</h2>
+    <div class="body">
+      <div class="row grow s12-row">
+        <div class="col fs">
+          <div class="eyebrow">Few-shot learning</div>
+          <div class="fs-row"><span class="ms">chat</span><div><b>Tell</b> <span class="muted">zero-shot</span><p>Rules only</p></div></div>
+          <div class="fs-row pick"><span class="ms">menu_book</span><div><b>Show</b> <span class="muted">few-shot</span><p>Rules + ~20 labelled examples</p></div><span class="pick-badge">MIRA ✓</span></div>
+          <div class="fs-row"><span class="ms">model_training</span><div><b>Train</b> <span class="muted">fine-tune</span><p>Thousands of labels + a training pipeline</p></div></div>
+        </div>
+        <div class="col stackc">
+          <div class="eyebrow">Prompt anatomy</div>
+          <div class="pstack">
+            <div class="pb">Role: expert MI fidelity coder</div>
+            <div class="pb">Coding rules</div>
+            <div class="pb">Clinician &amp; client code definitions</div>
+            <div class="pb hl"><b>22 AnnoMI examples</b> <span>~1.4k tokens · auto-selected to cover all 15 labels</span></div>
+            <div class="cache-line"><span>cache line · static part cached on repeats</span></div>
+            <div class="pb tx mono">[T0] CLINICIAN: …</div>
+          </div>
+        </div>
+        <div class="col turnc grow">
+          <div class="eyebrow">One real turn</div>
+          <div class="bubble clin sm"><div class="who">Clinician <span class="chips"><span class="chip">OQ</span><span class="chip">SEEK</span><span class="ts">▶ 02:01</span></span></div>“You're clearly passionate about volleyball and your future. Can we talk about what some of the pros and cons of vaping are for you?”</div>
+          <pre class="json"><code>{ <span class="k">"turn"</span>: <span class="n">6</span>,
+  <span class="k">"rationale"</span>: <span class="s">"Affirms values, asks permission,
+    then invites pros and cons discussion."</span>,
+  <span class="k">"question"</span>: <span class="s">"open"</span>,
+  <span class="k">"mi_behaviour"</span>: <span class="s">"seek_collaboration"</span>,
+  <span class="k">"adherence"</span>: <span class="s">"adherent"</span> }</code></pre>
+          <div class="bubble client sm"><div class="who">Client <span class="chips"><span class="chip ct">CT</span><span class="ts">▶ 02:09</span></span></div>“Well, pros, it helps me relax… but I heard it's not super…”</div>
+        </div>
+      </div>
+      <div class="guards"><span><span class="ms">shield</span>every turn coded exactly once</span><span><span class="ms">shield</span>codes made consistent</span><span><span class="ms">shield</span>strict schema</span></div>
+    </div>
+  </div>
+  <aside class="notes">Few-shot learning: show the model solved examples instead of retraining it. 22 examples picked by algorithm so every label is covered. The fixed part goes first so Azure can cache it. Real turn: the model explains its reasoning first, then labels it open question, seeking collaboration.</aside>
+</section>
+
+<!-- ================= S13 · SUPERVISOR ================= -->
+<section id="s13" data-progress="Agents">
+  <div class="frame">
+    <h2 class="title">The Supervisor rates like an MI trainer, and every claim is checkable.</h2>
+    <div class="body">
+      <div class="row grow s13-row">
+        <div class="sup-hub">
+          <div class="col ins">
+            <div class="eyebrow">In</div>
+            <div class="io-card">Metrics as facts</div>
+            <div class="io-card">Coded transcript</div>
+            <div class="io-card">MITI rating anchors</div>
+            <div class="io-card">Trap catalogue + 2 calibration excerpts</div>
+          </div>
+          <div class="sup-node"><span class="ms fill">auto_awesome</span><b>Supervisor</b><span>gpt-5.4</span></div>
+          <div class="col outs">
+            <div class="eyebrow">Out</div>
+            <div class="io-card o">Empathy &amp; Collaboration + evidence</div>
+            <div class="io-card o">1–3 strengths</div>
+            <div class="io-card o">1–3 traps + better response</div>
+            <div class="io-card o">Coaching tips</div>
+          </div>
+        </div>
+        <div class="chain">
+          <div class="eyebrow">Grounding</div>
+          <div class="ch mono">"evidence": [11]</div>
+          <span class="ms ch-arrow">south</span>
+          <div class="ch"><span class="ms">verified</span>validator</div>
+          <span class="ms ch-arrow">south</span>
+          <div class="ch q"><span class="ts">▶ 03:09</span> “…maybe I could try to cut back…”</div>
+          <span class="ms ch-arrow">south</span>
+          <div class="ch vid"><span class="ms fill">play_circle</span>video seeks to 03:09</div>
+          <div class="stat sm"><div class="v">100%</div><div class="l">valid citations (483 / 483)</div></div>
+        </div>
+        <div class="card trap-card big-trap grow">
+          <div class="tc-head"><b>Reflect the change talk before moving to solutions</b></div>
+          <div class="tc-meta"><span class="chip cat">missed_change_talk</span><span class="ts">▶ 03:09</span></div>
+          <p>Mia offered strong change talk: she could cut back and needs another way to cope with stress. The clinician moved quickly into offering options.</p>
+          <div class="better"><span class="lbl">Better response</span>“Cutting back feels more realistic to you right now, and the bigger challenge is finding another way to handle all that stress without leaning on vaping.”</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">The Supervisor gets the metrics as facts, rating anchors and a trap catalogue. It cites turn numbers; our code turns them into a quote and a clickable timestamp: 100% of citations valid. It also tells the clinician exactly what she could have said instead.</aside>
+</section>
+
+<!-- ================= S14 · DEMO ================= -->
+<section id="s14" data-bg="dark" data-progress="Demo">
+  <div class="frame dark">
+    <h2 class="title">Live demo: MIRA reviews Mia's session.</h2>
+    <div class="body">
+      <div class="route">
+        <div class="stop"><span class="sn">1</span><span class="ms">play_circle</span><div><b>Analyze</b><span>clip 0:39–3:43, live stages</span></div></div>
+        <div class="stop"><span class="sn">2</span><span class="ms">speed</span><div><b>Overview</b><span>score + 3 KPIs</span></div></div>
+        <div class="stop"><span class="sn">3</span><span class="ms">forum</span><div><b>Feedback</b><span>▶ seek, better responses</span></div></div>
+        <div class="stop"><span class="sn">4</span><span class="ms">scoreboard</span><div><b>Scorecard</b><span>vs AnnoMI medians</span></div></div>
+        <div class="stop"><span class="sn">5</span><span class="ms">subject</span><div><b>Transcript</b><span>coded, filterable</span></div></div>
+        <div class="stop"><span class="sn">6</span><span class="ms">timeline</span><div><b>Dynamics</b><span>run time, tokens</span></div></div>
+      </div>
+      <div class="shots">
+        <figure class="f-overview"><div class="shot"><img src="assets/img/overview.jpg" alt="MIRA overview: 8/12 Basic proficiency, Empathy 3.5, Collaboration 3.5, change talk 83%"></div><figcaption><span class="sn">2</span>Overview · 8 / 12 Basic proficiency, change talk 83%</figcaption></figure>
+        <figure class="f-feedback"><div class="shot"><img src="assets/img/feedback.png" alt="MIRA feedback tab with strengths, traps and better responses"></div><figcaption><span class="sn">3</span>Feedback · timestamped strengths, traps, “try instead”</figcaption></figure>
+        <figure class="f-dynamics"><div class="shot"><img src="assets/img/dynamics.png" alt="MIRA session dynamics: change talk overtakes sustain talk"></div><figcaption><span class="sn">6</span>Dynamics · change talk overtakes sustain talk</figcaption></figure>
+      </div>
+      <p class="foot demo-foot"><span class="ms">backup</span>Plan B: the saved report opens instantly, with no Azure call.</p>
+    </div>
+  </div>
+  <aside class="notes">1) Start the analysis first (transcript cached, ~50 s). 2) Overview: about 8/12, Basic; change talk 83% (runs vary 6–8). 3) Feedback: click ▶ on "Reflect the change talk…". 4) Scorecard: R:Q below Basic; AnnoMI medians. 5) Transcript: filter Change talk. 6) Dynamics / Run details: ~50 s. Fallback: open the saved report.</aside>
+</section>
+
+<!-- ================= S15 · YARDSTICKS ================= -->
+<section id="s15" data-progress="Proof">
+  <div class="frame">
+    <h2 class="title">How to read our results: four yardsticks.</h2>
+    <div class="body">
+      <div class="yard grow">
+        <div class="card yc">
+          <div class="yc-head"><span class="icon-badge"><span class="ms">balance</span></span><h3>Cohen's kappa (κ)</h3></div>
+          <p>Agreement <b>beyond chance</b>. A coder answering “neutral” every time scores 64% accuracy but <b>κ = 0</b>.</p>
+          <div class="kscale"><div class="kbar"></div><div class="kt"><span style="left:0">0 chance</span><span style="left:40%">0.4 moderate</span><span style="left:60%">0.6 substantial</span><span style="left:80%">0.8 almost perfect</span></div></div>
+          <div class="ours"><span class="ms">arrow_forward</span>MIRA: κ 0.86 on main clinician behaviour</div>
+        </div>
+        <div class="card yc">
+          <div class="yc-head"><span class="icon-badge"><span class="ms">groups</span></span><h3>Human ceiling</h3></div>
+          <p>10 experts labelled the same 7 sessions; we compare each with the other 9. <b>MIRA ≈ ceiling</b> means as consistent as an expert.</p>
+          <div class="dots10"><i class="me"></i><span class="ms vs">compare_arrows</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="dl">1 expert vs the majority of 9</span></div>
+          <div class="ours"><span class="ms">arrow_forward</span>Ceiling: κ 0.81 on main clinician behaviour</div>
+        </div>
+        <div class="card yc">
+          <div class="yc-head"><span class="icon-badge"><span class="ms">swap_vert</span></span><h3>AUC</h3></div>
+          <p>Pick one good and one poor session at random: how often does MIRA score the good one higher?</p>
+          <div class="auc-vis"><span><span class="ms">toll</span>0.5 = coin flip</span><span class="ms arrow">arrow_forward</span><span class="teal"><span class="ms">my_location</span>1.0 = always</span></div>
+          <div class="ours"><span class="ms">arrow_forward</span>MIRA: AUC 0.994 on the proficiency score</div>
+        </div>
+        <div class="card yc">
+          <div class="yc-head"><span class="icon-badge"><span class="ms">record_voice_over</span></span><h3>Word error rate (WER)</h3></div>
+          <p>Share of words transcribed wrong. <b>10% ≈ 1 word in 10.</b></p>
+          <div class="wer">“I felt out of <s>bread</s> <b>breath</b> and super tired at practice.”</div>
+          <div class="ours"><span class="ms">arrow_forward</span>MIRA: 10% WER, 100% speaker roles correct</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Kappa is agreement beyond chance: a lazy coder that always says 'neutral' gets 64% accuracy but zero kappa. The human ceiling is how well experts agree with each other. AUC: how often a good session scores above a poor one. WER: transcription errors.</aside>
+</section>
+
+<!-- ================= S16 · CODER VS EXPERTS ================= -->
+<section id="s16" data-progress="Proof">
+  <div class="frame">
+    <h2 class="title">The Coder agrees with experts about as well as experts agree with each other.</h2>
+    <div class="body">
+      <div class="row grow s16-row">
+        <div class="card chart-card"><div class="chart-h"><b>Agreement with expert labels (Cohen's κ)</b><span class="legend"><i class="lg teal"></i>MIRA (gpt-5.4)<i class="lg slate"></i>Human ceiling</span></div><div class="cwrap"><canvas id="chart-kappa"></canvas></div></div>
+        <div class="col side-cards">
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">dataset</span></span><p><b>1,276 turns</b> from 27 held-out sessions</p></div>
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">model_training</span></span><p>Model chosen by data: <b>gpt-5.4 κ 0.86</b> vs mini 0.76</p></div>
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">tune</span></span><p>One prompt rule (“Yes.” = neutral) lifted client-talk κ <b>0.47 → 0.61</b></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">On nearly 1,300 held-out turns, the Coder matches or beats the human ceiling on three of five code families and is within a few points on the other two. Data picked our model and tuned our prompt: one rule lifted client-talk agreement by 14 points.</aside>
+</section>
+
+<!-- ================= S17 · GOOD VS POOR ================= -->
+<section id="s17" data-progress="Proof">
+  <div class="frame">
+    <h2 class="title">MIRA ranks expert-rated good vs poor sessions almost perfectly.</h2>
+    <div class="body">
+      <div class="row grow s17-row">
+        <div class="card chart-card"><div class="chart-h"><b>Proficiency points per held-out session</b><span class="legend"><i class="lg teal"></i>expert-rated high (n=17)<i class="lg coral"></i>low (n=10)<i class="lg ink"></i>mean</span></div><div class="cwrap"><canvas id="chart-auc"></canvas></div></div>
+        <div class="col auc-side">
+          <div class="stat big-auc"><div class="v">0.994</div><div class="l">AUC, proficiency score<br>(1 mis-ordered pair out of 170)</div></div>
+          <div class="row two-auc"><div class="stat sm"><div class="v">0.98</div><div class="l">Empathy AUC</div></div><div class="stat sm"><div class="v">1.00</div><div class="l">Collaboration AUC</div></div></div>
+          <div class="eyebrow">Trust signals</div>
+          <div class="sig4">
+            <div><b>100%</b><span>citations valid</span></div>
+            <div><b>0</b><span>score change on re-runs</span></div>
+            <div><b>10%</b><span>word error rate</span></div>
+            <div><b>100%</b><span>speaker roles correct</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Never seeing the expert's quality label, MIRA puts almost every good session above every poor one: AUC 0.994; one pair out of 170 out of order. Citations 100% valid, identical scores on re-runs, speaker roles 100% right.</aside>
+</section>
+
+<!-- ================= S18 · HONEST GAPS ================= -->
+<section id="s18" data-progress="Proof">
+  <div class="frame">
+    <h2 class="title">MIRA reviews MIRA: what we still need to improve.</h2>
+    <div class="body">
+      <div class="row grow s18-row">
+        <div class="col well">
+          <div class="eyebrow teal">What went well</div>
+          <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>κ ≈ experts</b></div>
+          <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>AUC 0.994</b></div>
+          <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>100% grounded feedback</b></div>
+        </div>
+        <div class="col grow">
+          <div class="eyebrow coral">What to improve</div>
+          <div class="gaps">
+            <div class="card trap-card gap"><h3>Reflection depth wobbles</h3><p>40 of 110 expert-complex reflections coded simple; demo score varied 6–8 across runs.</p><div class="fix"><span class="lbl">Fix</span>Run the Coder 3× and take the majority vote.</div></div>
+            <div class="card trap-card gap"><h3>Bands are strict</h3><p>Ranking is right, but 7 of 17 good sessions land in “Developing”.</p><div class="fix"><span class="lbl">Fix</span>Calibrate bands to AnnoMI percentiles.</div></div>
+            <div class="card trap-card gap"><h3>Audio merges short turns</h3><p>70% of expert utterances matched (“Mm-hmm” gets merged).</p><div class="fix"><span class="lbl">Fix</span>Word-level timestamps; split backchannels.</div></div>
+            <div class="card trap-card gap"><h3>Not yet validated</h3><p>%MI-adherent has no expert labels; text only; prototype (no auth or storage).</p><div class="fix"><span class="lbl">Fix</span>Pilot on real, human-coded sessions.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">We ran our own playbook on ourselves. Simple versus complex reflections wobble (experts disagree there too). Bands are strict. Audio merges very short turns. Some metrics aren't validated yet. Each has a concrete fix, starting with a three-run majority vote.</aside>
+</section>
+
+<!-- ================= S19 · COST ================= -->
+<section id="s19" data-progress="Cost">
+  <div class="frame">
+    <h2 class="title">About 9 cents per 3-minute review, measured, not estimated.</h2>
+    <div class="body">
+      <div class="row grow s19-row">
+        <div class="card chart-card"><div class="chart-h"><b>Cost per review (USD), two real runs</b><span class="muted small">~70% model output tokens · ~30% audio</span></div><div class="cwrap"><canvas id="chart-cost"></canvas></div></div>
+        <div class="col price-side">
+          <div class="prices">
+            <div class="price"><b>3 min</b><span class="pv">≈ $0.09</span><span class="tag ai">measured</span></div>
+            <div class="price"><b>30 min</b><span class="pv">≈ $0.50</span><span class="rng">$0.40–0.70</span><span class="tag warn">extrapolated</span></div>
+            <div class="price"><b>60 min</b><span class="pv">≈ $1.00</span><span class="rng">$0.80–1.30</span><span class="tag warn">extrapolated</span></div>
+          </div>
+          <div class="card scale-card"><span class="icon-badge"><span class="ms">groups</span></span><div><div class="eyebrow">At scale</div><p>100 clinicians × 4 sessions / month (30 min each)</p><div class="scale-v">≈ $200 / month</div></div></div>
+          <div class="callout teal small-callout"><span class="ms">savings</span>Roughly 1–2 cents per recorded minute.</div>
+        </div>
+      </div>
+      <p class="foot">Azure list prices, Global Standard, pay-as-you-go: CU audio $0.36/h; gpt-5.4 $2.50 in / $15 out per 1M tokens; gpt-5.4-mini $0.75 / $4.50. Token counts from saved reports.</p>
+    </div>
+  </div>
+  <aside class="notes">Measured, not estimated: about 9 cents for a 3-minute review. Most of it is the model thinking and writing feedback. Scales to about 50 cents for 30 minutes, roughly 1–2 cents per minute. 100 clinicians reviewing four sessions a month is about $200.</aside>
+</section>
+
+<!-- ================= S20 · FEASIBILITY ================= -->
+<section id="s20" data-progress="Cost">
+  <div class="frame">
+    <h2 class="title">No GPUs, no training: managed Azure services and a tested codebase.</h2>
+    <div class="body">
+      <div class="feas">
+        <div class="card fc"><span class="icon-badge azure"><span class="ms">cloud</span></span><h3>Managed AI</h3><p>Content Understanding + Azure OpenAI in Foundry; Entra ID auth</p></div>
+        <div class="card fc"><span class="icon-badge"><span class="ms">settings</span></span><h3>Configurable</h3><p>Models, reasoning effort and analyzer set in <span class="mono">.env</span></p></div>
+        <div class="card fc"><span class="icon-badge"><span class="ms">fact_check</span></span><h3>Quality gates</h3><p>31 unit tests + 3 eval suites; re-measured on every prompt change</p></div>
+        <div class="card fc"><span class="icon-badge"><span class="ms">menu_book</span></span><h3>Maintainable</h3><p>13 Python modules, typed schemas, README recipes</p></div>
+      </div>
+      <div class="eyebrow">Path to production</div>
+      <div class="chev">
+        <div class="cv done"><div class="cv-h"><span class="ms fill">check_circle</span>Prototype</div><p>End-to-end pipeline, app, evals, cost telemetry</p></div>
+        <div class="cv pilot"><div class="cv-h"><span class="ms">rocket_launch</span>Pilot</div><p>Container Apps / App Service · Entra sign-in · Blob storage with retention · Key Vault · App Insights</p><p class="b">Validate on 30–50 consented, human-coded sessions</p></div>
+        <div class="cv"><div class="cv-h"><span class="ms">trending_up</span>Scale</div><p>Team dashboards · LMS / EHR integration · batch reviews (−50%) · more languages</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">No GPUs and no training pipeline: just managed Azure services. Models and settings are configuration; 31 tests plus three evaluation suites catch regressions. A pilot is integration work: hosting, sign-in, storage, and a validation study on real, consented sessions.</aside>
+</section>
+
+<!-- ================= S21 · RISKS ================= -->
+<section id="s21" data-progress="Cost">
+  <div class="frame">
+    <h2 class="title">Risks we planned for.</h2>
+    <div class="body">
+      <div class="risks">
+        <div class="rh"><span class="coral">Risk</span><span class="teal">Mitigation</span></div>
+        <div class="rr"><div class="rk"><span class="ms">rule</span>Wrong code or score</div><div class="rm"><span class="ms">verified_user</span>Evals before every change · grounded evidence · supervisor override · a coaching aid, not certification</div></div>
+        <div class="rr"><div class="rk"><span class="ms">lock</span>Privacy of health conversations</div><div class="rm"><span class="ms">verified_user</span>Stays in the organisation's Azure tenant · consent · retention and deletion · role-based access</div></div>
+        <div class="rr"><div class="rk"><span class="ms">visibility</span>Feels like surveillance</div><div class="rm"><span class="ms">verified_user</span>Feedback goes to the clinician first · managers see aggregates · opt-in</div></div>
+        <div class="rr"><div class="rk"><span class="ms">public</span>Doesn't generalise (English demo videos)</div><div class="rm"><span class="ms">verified_user</span>Pilot on real sessions · recalibrate bands · add locales</div></div>
+        <div class="rr"><div class="rk"><span class="ms">trending_up</span>Cost or model drift</div><div class="rm"><span class="ms">verified_user</span>Token and time telemetry in every report · re-run evals before switching models</div></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Key risks: wrong scores, privacy and surveillance fears. Evidence on every claim, data in the organisation's tenant, consent, and feedback that goes to the clinician first.</aside>
+</section>
+
+<!-- ================= S22 · IMPACT ================= -->
+<section id="s22" data-progress="Impact">
+  <div class="frame">
+    <h2 class="title">Feedback on every session: the lever for better conversations.</h2>
+    <div class="body">
+      <div class="chain5">
+        <div class="c5"><b>Feedback on every session</b><span class="chip soft-teal">~1 min · ~$0.50 / 30 min</span></div>
+        <div class="c5"><b>Faster skill growth</b><span class="chip soft-teal">proficiency over time</span></div>
+        <div class="c5"><b>More reflecting, less pushing</b><span class="chip soft-teal">R:Q · traps</span></div>
+        <div class="c5"><b>More client change talk</b><span class="chip soft-teal">change talk ratio</span></div>
+        <div class="c5 last"><b>Behaviour change &amp; outcomes</b><span class="chip pilot-chip">needs pilot data</span></div>
+      </div>
+      <div class="eyebrow mira-measures">MIRA measures ↑</div>
+      <div class="ba grow">
+        <div class="ba-h"><span>Who</span><span>Before</span><span class="teal">With MIRA</span></div>
+        <div class="ba-r"><span><span class="ms">medical_services</span>Clinician</span><span>Rare, late, general feedback</span><span>Every session, ~1 minute, exact moments + what to say</span></div>
+        <div class="ba-r"><span><span class="ms">supervisor_account</span>Supervisor</span><span>Hours coding a few sessions</span><span>Triage “Developing” first; coach instead of count</span></div>
+        <div class="ba-r"><span><span class="ms">monitoring</span>Programme lead</span><span>Training impact invisible</span><span>MITI-standard trends by team and metric</span></div>
+        <div class="ba-r"><span><span class="ms">person</span>Client</span><span>Lectured, defensive</span><span>Heard; autonomy respected</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Feedback on every session is the lever: skill, then more reflecting and less pushing, more client change talk, and ultimately behaviour change. MIRA measures the first four links today; a pilot proves the last. Expert time moves from scoring to coaching.</aside>
+</section>
+
+<!-- ================= S23 · BEYOND WORDS ================= -->
+<section id="s23" data-progress="Next">
+  <div class="frame">
+    <h2 class="title">Next: hear how it's said and see what's shown, measuring behaviour, not emotion.</h2>
+    <div class="body">
+      <div class="row grow s23-row">
+        <div class="col same-words">
+          <div class="eyebrow">Same words</div>
+          <div class="sw"><div class="bubble client sm">“I suppose I could try.”</div>
+            <svg viewBox="0 0 360 80" class="wf energetic"><path d="M0 40 L20 40 L30 12 L40 68 L50 6 L60 74 L70 18 L80 60 L90 10 L100 70 L110 22 L120 58 L130 14 L140 66 L150 28 L160 52 L170 20 L180 62 L190 30 L200 48 L210 16 L220 64 L230 26 L240 54 L250 34 L260 46 L270 40 L360 40"/></svg>
+            <span class="chip ct">change talk</span></div>
+          <div class="sw"><div class="bubble client sm">“I suppose I could try.”</div>
+            <svg viewBox="0 0 360 80" class="wf flat"><path d="M0 40 L30 40 L40 34 L50 46 L60 36 L70 44 L80 38 L90 42 L100 37 L110 43 L120 39 L130 41 L160 40 L170 36 L180 44 L190 40 L360 40"/></svg>
+            <span class="chip n">masked sustain talk</span></div>
+          <p class="muted cap">Text can't tell them apart.</p>
+        </div>
+        <div class="col tiers grow">
+          <div class="tier t1"><span class="tn">1</span><span class="icon-badge"><span class="ms">timer</span></span><div><h3>Voice from timestamps we already have <span class="tag ai">no new AI</span></h3><p>Clinician talk-time share · pause after the client speaks · interruptions · speaking rate</p></div></div>
+          <div class="tier t2"><span class="tn">2</span><span class="icon-badge"><span class="ms">graphic_eq</span></span><div><h3>Audio-native model on key moments</h3><p>Warmth, pace, hesitation, each with a timestamp</p></div></div>
+          <div class="tier t3"><span class="tn">3</span><span class="icon-badge"><span class="ms">videocam</span></span><div><h3>Video via Content Understanding <span class="mono">prebuilt-video</span></h3><p>Gaze, nodding, posture, movement synchrony</p></div></div>
+        </div>
+        <div class="col dodont">
+          <div class="dd do"><div class="eyebrow teal">We will</div><p><span class="ms">check</span>Measure observable behaviour</p><p><span class="ms">check</span>Get consent from both people</p><p><span class="ms">check</span>Show the clinician first</p></div>
+          <div class="dd dont"><div class="eyebrow coral">We won't</div><p><span class="ms">close</span>Infer emotion from faces or voices</p><p><span class="ms">close</span>Score clients</p><p><span class="ms">close</span>Enable surveillance</p></div>
+        </div>
+      </div>
+      <p class="foot">Evidence: vocal synchrony and empathy (Imel et al., 2014); empathy from speech (Xiao et al., 2015); body-movement synchrony and outcome (Ramseyer &amp; Tschacher, 2011). Microsoft retired facial emotion inference in Azure Face (2022).</p>
+    </div>
+  </div>
+  <aside class="notes">'I suppose I could try' can be real commitment or a polite no; text can't tell. Next: voice signals from timestamps we already have, then an audio model for tone, then video for gaze and nodding. Behaviour, not emotion, in line with Microsoft's Responsible AI decisions.</aside>
+</section>
+
+<!-- ================= S24 · PROMISES KEPT ================= -->
+<section id="s24" data-bg="dark" data-progress="none">
+  <div class="frame dark">
+    <h2 class="title center-title">Five promises, five receipts.</h2>
+    <div class="body">
+      <div class="kept">
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="0">check_circle</span><span class="ms pi">rule</span><b>Standards-based</b><span>MITI 4.2.1 + AnnoMI expert labels</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="1">check_circle</span><span class="ms pi">link</span><b>Grounded</b><span>483 / 483 citations valid</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="2">check_circle</span><span class="ms pi">lightbulb</span><b>Actionable</b><span>a better response for every trap</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="3">check_circle</span><span class="ms pi">bolt</span><b>Fast &amp; affordable</b><span>~1 minute, ≈ $0.09 per 3-min review</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="4">check_circle</span><span class="ms pi">verified</span><b>Measured</b><span>κ ≈ experts; AUC 0.994</span></div>
+      </div>
+      <div class="closing fragment rise" data-fragment-index="5">
+        <div class="cq">“…maybe I could try to cut back a little bit.”</div>
+        <div class="cl">Every clinician deserves to know which words got them there.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Five promises, five receipts: standards-based, grounded, actionable, fast and affordable, and measured. And remember Mia's words: 'maybe I could try to cut back.' Every clinician deserves to know which words got them there.</aside>
+</section>
+
+<!-- ================= S25 · THANK YOU ================= -->
+<section id="s25" data-bg="dark" data-progress="none">
+  <div class="frame dark hero end">
+    <div class="thanks">Thank you. Questions?</div>
+    <div class="motif" data-motif="small"></div>
+    <div class="end-meta">
+      <div class="repo"><span class="ms">code</span>github.com/rahulnk09/Motivational-Interviewing-Review-Agent</div>
+      <div class="hero-team">Team <b>PhoenixAI</b> · Rahul Nakka · Deependra Shekhawat</div>
+      <div class="hero-tech">Azure Content Understanding · Azure OpenAI in Microsoft Foundry · LangGraph · Pydantic · Streamlit</div>
+    </div>
+  </div>
+  <aside class="notes">Thank you. Happy to take questions.</aside>
+</section>
+
+</div>
+</div>
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/notes.js"></script>
+<script src="vendor/chart/chart.umd.min.js"></script>
+<script src="js/deck.js"></script>
+</body>
+</html>

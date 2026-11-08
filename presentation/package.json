@@ -1,0 +1,25 @@
+{
+  "name": "mira-deck",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "node scripts/vendor.mjs",
+    "vendor": "node scripts/vendor.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node tests/check-deck.mjs",
+    "pdf": "node scripts/export-pdf.mjs"
+  },
+  "description": "MIRA hackathon slide deck (reveal.js + Chart.js), offline, with automated visual checks",
+  "dependencies": {
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "chart.js": "^4.6.1",
+    "material-symbols": "^0.48.3",
+    "reveal.js": "^5.2.1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.0"
+  },
+  "private": true,
+  "type": "module"
+}

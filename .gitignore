@@ -24,3 +24,9 @@ mi_project/data/uploads/
 
 # Test caches
 .pytest_cache/
+
+screenshots/
+
+# Presentation deck (dependencies and generated test screenshots)
+presentation/node_modules/
+presentation/test-output/
