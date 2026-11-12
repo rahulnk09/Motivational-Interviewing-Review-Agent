@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>MIRA · MI Review App · Team PhoenixAI</title>
+<link rel="stylesheet" href="vendor/reveal/reset.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.css">
+<link rel="stylesheet" href="css/deck.css">
+<link rel="stylesheet" href="css/slides.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ================= S1 · TITLE ================= -->
+<section id="s1" data-bg="dark">
+  <div class="frame dark hero">
+    <div class="eyebrow">Hackathon screening · Team PhoenixAI</div>
+    <h1 class="hero-mark">MIRA</h1>
+    <p class="hero-sub">AI review of Motivational Interviewing sessions</p>
+    <div data-motif></div>
+    <p class="hero-promise">Upload a recorded counselling session. Get a transcript, an MI scorecard and timestamped coaching in about 1–2 minutes.</p>
+    <div class="team">
+      <div class="member"><span class="avatar">RN</span><b>Rahul Nakka</b></div>
+      <div class="member"><span class="avatar">DS</span><b>Deependra Shekhawat</b></div>
+    </div>
+    <p class="hero-tech">Azure Content Understanding · Azure OpenAI gpt-5.4 in Microsoft Foundry · LangGraph · Streamlit</p>
+  </div>
+  <aside class="notes">We're Team PhoenixAI: Rahul Nakka and Deependra Shekhawat. We built MIRA, the MI Review App. You upload a recorded counselling session, and in about a minute or two you get a transcript, an MI scorecard and coaching linked to the exact moments in the video.</aside>
+</section>
+
+<!-- ================= S2 · PROBLEM ================= -->
+<section id="s2" data-progress="Problem">
+  <div class="frame">
+    <h2 class="title">Clinicians learn MI from feedback, but <em>expert review doesn't scale</em></h2>
+    <div class="body">
+      <div class="row s2-row">
+        <div class="card loop-card">
+          <div class="eyebrow">How feedback works today</div>
+          <div class="loop-flow">
+            <div class="loop-node"><span class="icon-badge"><span class="ms">videocam</span></span><b>Session recorded</b><span>clinician + client</span></div>
+            <span class="ms flow-arrow">arrow_forward</span>
+            <div class="loop-node"><span class="icon-badge amber"><span class="ms">hourglass_top</span></span><b>Waits for a trained coder</b><span>MI coding needs specialist training</span></div>
+            <span class="ms flow-arrow">arrow_forward</span>
+            <div class="loop-node"><span class="icon-badge amber"><span class="ms">schedule</span></span><b>Hours of coding</b><span>every turn, against the MITI manual</span></div>
+            <span class="ms flow-arrow">arrow_forward</span>
+            <div class="loop-node bad"><span class="icon-badge coral"><span class="ms">event_busy</span></span><b>Feedback late, or never</b><span>most sessions go unreviewed</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="row s2-pains">
+        <div class="card pain"><span class="icon-badge amber"><span class="ms">timer</span></span><div><h3>Slow</h3><p>A trained coder reviews each recording turn by turn. It takes hours per session.</p></div></div>
+        <div class="card pain"><span class="icon-badge amber"><span class="ms">payments</span></span><div><h3>Scarce</h3><p>Manual review is expensive and doesn't scale, so most sessions never get feedback.</p></div></div>
+        <div class="card pain"><span class="icon-badge coral"><span class="ms">compare_arrows</span></span><div><h3>Inconsistent</h3><p>Even experts disagree: two AnnoMI experts coding the same client turns agree only <b>κ 0.47</b> (0 = chance, 1 = perfect).</p></div></div>
+      </div>
+      <div class="callout teal"><span class="ms">target</span>Needed: feedback on every session that is timely, consistent, and tied to the exact moment in the recording.</div>
+    </div>
+  </div>
+  <aside class="notes">Clinicians get better at Motivational Interviewing through feedback on their real sessions. Today that means a trained coder going through the recording turn by turn against the MITI manual, which takes hours per session. It's slow and expensive, so most sessions are never reviewed. And it isn't perfectly consistent either: on AnnoMI, two experts coding the same client statements agree only kappa 0.47. What clinicians need is feedback on every session that is fast, consistent and points to the exact moment.</aside>
+</section>
+
+<!-- ================= S3 · MI IN ONE MINUTE ================= -->
+<section id="s3" data-progress="MI basics">
+  <div class="frame">
+    <h2 class="title">MI in one minute: <em>draw out the client's own reasons</em>, don't argue</h2>
+    <div class="body s3-body">
+      <p class="lede">Motivational Interviewing is a collaborative way of talking that strengthens a person's own motivation to change: smoking, alcohol, medication, diet, exercise.</p>
+      <div class="row s3-cases">
+        <div class="card case bad">
+          <div class="case-head"><span class="chip soft-coral">Sal · asthma &amp; his dog</span><span class="muted small">expert-rated low quality</span></div>
+          <div class="bubble clin sm"><div class="who">Clinician <span class="ts">02:58</span></div>“Do you put Oscar higher than your baby, than your wife? That makes no sense to me.”</div>
+          <div class="bubble client sm"><div class="who">Client</div>“I don't think you get my situation. I've had this dog for 12 years.”</div>
+          <div class="case-out"><span class="v coral">0%</span><span class="l">change talk: the client argues <b>against</b> change</span></div>
+        </div>
+        <div class="card case good">
+          <div class="case-head"><span class="chip soft-teal">Mia · vaping</span><span class="muted small">role-play demo</span></div>
+          <div class="bubble clin sm"><div class="who">Clinician <span class="ts">02:01</span></div>“Can we talk about what some of the pros and cons of vaping are for you?”</div>
+          <div class="bubble client sm"><div class="who">Client</div>“…I think a part of me worries about getting addicted.”</div>
+          <div class="case-out"><span class="v teal">67%</span><span class="l">change talk: the client voices <b>her own</b> reasons to change</span></div>
+        </div>
+      </div>
+      <div class="procs">
+        <div class="proc"><b>1 · Engaging</b><span>build trust</span><q>“I'm so glad that you came in today… this is a judgment-free zone.”</q></div>
+        <div class="proc"><b>2 · Focusing</b><span>agree what to discuss</span><q>“How does vaping fit into all this for you?”</q></div>
+        <div class="proc"><b>3 · Evoking</b><span>draw out her reasons</span><q>“How do you see vaping influencing your performance in volleyball?”</q></div>
+        <div class="proc"><b>4 · Planning</b><span>her next step</span><q>“What would you like to do moving forward in terms of vaping?”</q></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Motivational Interviewing is a way of talking that helps people find their own reasons to change. Two real sessions from our data show the difference. Sal's clinician argues: "Do you put Oscar higher than your baby?" Sal digs in, and there's zero change talk. Mia's clinician asks about the pros and cons, and Mia says herself that she worries about getting addicted: 67% change talk. A good session moves through four steps: engage, focus, evoke, plan. Here they're illustrated with Mia's clinician.</aside>
+</section>
+
+<!-- ================= S4 · SKILLS TO SCORE ================= -->
+<section id="s4" data-progress="MI basics">
+  <div class="frame">
+    <h2 class="title">From skills to a score: <em>what MIRA measures</em></h2>
+    <div class="body">
+      <div class="row s4-row">
+        <div class="col s4-left">
+          <div class="eyebrow">OARS: the clinician's four core skills</div>
+          <div class="oars">
+            <div class="oars-tile"><span class="L">O</span><div><b>Open question</b><q>“What would you like to do moving forward?”</q></div></div>
+            <div class="oars-tile"><span class="L">A</span><div><b>Affirmation</b><q>“It says a lot about who you are as a person…”</q></div></div>
+            <div class="oars-tile"><span class="L">R</span><div><b>Reflection</b><q><i>simple:</i> “School can be so stressful.”<br><i>complex:</i> “You're balancing a lot on your plate.”</q></div></div>
+            <div class="oars-tile"><span class="L">S</span><div><b>Summary</b><q>A longer reflection that pulls several points together.</q></div></div>
+          </div>
+          <div class="eyebrow">What the client says</div>
+          <div class="talk">
+            <div class="talk-row"><span class="chip ct">change</span><q>“I felt out of breath and super tired.”</q></div>
+            <div class="talk-row"><span class="chip st">sustain</span><q>“Honestly, it helps me relax.”</q></div>
+            <div class="talk-row"><span class="chip n">neutral</span><q>“I have volleyball practice basically every day.”</q></div>
+          </div>
+        </div>
+        <div class="card s4-score">
+          <div class="score-head"><div class="eyebrow">Scorecard · MITI 4.2.1 thresholds · Mia's session</div></div>
+          <table class="mt">
+            <thead><tr><th>Metric</th><th>Mia</th><th>Basic · Advanced</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Empathy (1–5) <span class="tag ai">LLM</span></td><td>3.5</td><td>≥ 3.5 · ≥ 4</td><td><span class="pt p1">+1</span></td></tr>
+              <tr><td>Collaboration (1–5) <span class="tag ai">LLM</span></td><td>3.5</td><td>≥ 3.5 · ≥ 4</td><td><span class="pt p1">+1</span></td></tr>
+              <tr><td>Reflections ÷ questions <span class="tag py">Python</span></td><td>0.50</td><td>≥ 1 · ≥ 2</td><td><span class="pt p0">0</span></td></tr>
+              <tr><td>% open questions <span class="tag py">Python</span></td><td>100%</td><td>&gt; 40% · &gt; 50%</td><td><span class="pt p2">+2</span></td></tr>
+              <tr><td>% complex reflections <span class="tag py">Python</span></td><td>67%</td><td>&gt; 40% · &gt; 50%</td><td><span class="pt p2">+2</span></td></tr>
+              <tr><td>% MI-adherent turns <span class="tag py">Python</span></td><td>100%</td><td>≥ 90% · 100%</td><td><span class="pt p2">+2</span></td></tr>
+            </tbody>
+          </table>
+          <div class="score-total">
+            <div class="ring-wrap"><span class="big">8</span><span class="of">/ 12</span></div>
+            <div><b class="band">Basic proficiency</b><span class="muted">0–6 Developing · 7–9 Basic · 10–12 Advanced</span></div>
+          </div>
+          <div class="ctr-line"><span class="ms">person</span><span><b>Client impact:</b> change talk ratio = change ÷ (change + sustain) = 4 ÷ 6 = <b>67%</b> (no points)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">MI quality is measured with MITI, the standard coding manual. It has two lenses. First, label every turn: open questions, affirmations, reflections, and whether the client's words point toward change or away from it. Second, rate the whole session on empathy and collaboration. That gives six metrics, each worth up to two points, so 0 to 12. Mia's clinician scores 8, which is Basic proficiency. Her open questions are excellent, but she asks twice as many questions as she reflects. Separately, the change talk ratio shows whether it worked for the client.</aside>
+</section>
+
+<!-- ================= S5 · PIPELINE ================= -->
+<section id="s5" data-progress="Solution">
+  <div class="frame">
+    <h2 class="title">How MIRA works: <em>two AI agents</em>, with plain code doing the maths</h2>
+    <div class="body">
+      <div class="pipeline">
+        <div class="stage local">
+          <div class="st-top"><span class="st-n">1</span><span class="ms">content_cut</span></div>
+          <b>Prepare</b><span class="tech">ffmpeg · runs locally</span>
+          <div class="io"><span class="k">In</span>video + clip range</div>
+          <div class="io"><span class="k">Out</span>16 kHz mono audio; video frames stay local</div>
+        </div>
+        <span class="ms st-arrow">arrow_forward</span>
+        <div class="stage azure">
+          <div class="st-top"><span class="st-n">2</span><span class="ms">hearing</span></div>
+          <b>Listen</b><span class="tech">Azure Content Understanding</span>
+          <div class="io"><span class="k">In</span>audio</div>
+          <div class="io"><span class="k">Out</span>who spoke when (ms), text, + generated fields: clinician speaker, target behaviour, summary</div>
+        </div>
+        <span class="ms st-arrow">arrow_forward</span>
+        <div class="stage agent">
+          <div class="st-top"><span class="st-n">3</span><span class="ms">sell</span></div>
+          <b>Code</b><span class="tech">Coder agent · gpt-5.4</span>
+          <div class="io"><span class="k">In</span>numbered turns + 22 expert-labelled examples</div>
+          <div class="io"><span class="k">Out</span>MITI / AnnoMI codes for every turn + a 15-word reason</div>
+        </div>
+        <span class="ms st-arrow">arrow_forward</span>
+        <div class="stage py">
+          <div class="st-top"><span class="st-n">4</span><span class="ms">calculate</span></div>
+          <b>Measure</b><span class="tech">Python · no AI</span>
+          <div class="io"><span class="k">In</span>turn codes</div>
+          <div class="io"><span class="k">Out</span>6 metrics, 0–12 score, change talk ratio</div>
+        </div>
+        <span class="ms st-arrow">arrow_forward</span>
+        <div class="stage agent">
+          <div class="st-top"><span class="st-n">5</span><span class="ms">psychology</span></div>
+          <b>Supervise</b><span class="tech">Supervisor agent · gpt-5.4</span>
+          <div class="io"><span class="k">In</span>coded transcript + metrics + MITI rating anchors</div>
+          <div class="io"><span class="k">Out</span>Empathy, Collaboration, strengths, traps + better responses</div>
+        </div>
+        <span class="ms st-arrow">arrow_forward</span>
+        <div class="stage report">
+          <div class="st-top"><span class="st-n">6</span><span class="ms">dashboard</span></div>
+          <b>Report</b><span class="tech">Streamlit app</span>
+          <div class="io"><span class="k">Out</span>score, feedback with ▶ timestamps, coded transcript, charts</div>
+        </div>
+      </div>
+      <div class="row s5-bottom">
+        <div class="card tight genai">
+          <div class="eyebrow">AI / GenAI inside</div>
+          <div class="chips-wrap">
+            <span class="chip soft-slate">speech-to-text + speaker separation</span>
+            <span class="chip soft-slate">LLM-generated session fields (gpt-5.4-mini)</span>
+            <span class="chip soft-slate">few-shot turn coding</span>
+            <span class="chip soft-slate">LLM supervisor with MITI anchors</span>
+            <span class="chip soft-slate">strict JSON-schema outputs</span>
+            <span class="chip soft-slate">LangGraph orchestration</span>
+          </div>
+        </div>
+        <div class="card tight trust">
+          <div class="eyebrow">Trust by design</div>
+          <p><span class="ms">calculate</span>LLMs never do arithmetic</p>
+          <p><span class="ms">format_quote</span>LLMs cite turn numbers; code inserts quotes and timestamps</p>
+          <p><span class="ms">data_object</span>Every output is typed and validated (Pydantic)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Here's the pipeline. ffmpeg cuts the clip locally and keeps only the audio. Azure Content Understanding transcribes it, separates the speakers with millisecond timestamps, and generates three fields: which speaker is the clinician, the target behaviour and a summary. The Coder agent, gpt-5.4 with 22 expert-labelled examples, labels every turn. Plain Python computes the six metrics and the score. The Supervisor agent rates empathy and collaboration and writes the coaching. Three trust rules: the LLM never does arithmetic, it cites turn numbers while our code inserts quotes and timestamps, and every output is a strictly typed, validated object.</aside>
+</section>
+
+<!-- ================= S6 · ONE MOMENT ================= -->
+<section id="s6" data-progress="Solution">
+  <div class="frame">
+    <h2 class="title">One moment, end to end: <em>Mia at 02:29</em></h2>
+    <div class="body">
+      <div class="trace">
+        <div class="trace-step azure fragment rise" data-fragment-index="1">
+          <div class="ts-head"><span class="n">1</span>Content Understanding output</div>
+          <pre class="code-row">speaker: <b>"Speaker 1"</b>  start: <b>149750 ms</b>
+text: "It says a lot about who you are as a
+person… How do you see vaping influencing
+your performance in volleyball…?"
+ClinicianSpeaker = "Speaker 1" → <b>clinician</b></pre>
+        </div>
+        <span class="ms tr-arrow fragment rise" data-fragment-index="2">arrow_forward</span>
+        <div class="trace-step agent fragment rise" data-fragment-index="2">
+          <div class="ts-head"><span class="n">2</span>Coder agent · turn T8</div>
+          <pre class="code-row">main_behaviour: <b>question</b>  question: <b>open</b>
+mi_behaviour:   <b>affirm</b>    adherence: <b>adherent</b>
+rationale: "Strong affirmation followed by
+open question linking vaping to goals."</pre>
+        </div>
+        <span class="ms tr-arrow fragment rise" data-fragment-index="3">arrow_forward</span>
+        <div class="trace-step agent fragment rise" data-fragment-index="3">
+          <div class="ts-head"><span class="n">3</span>Coder agent · client turn T9</div>
+          <pre class="code-row">talk_type: <b>change</b>
+"…I felt out of breath and super tired.
+I just want to give my best to my team."
+rationale: "Says continued vaping may
+hurt performance and goals."</pre>
+        </div>
+        <div class="trace-step py fragment rise" data-fragment-index="4">
+          <div class="ts-head"><span class="n">4</span>Python metrics</div>
+          <pre class="code-row">open questions   6 / 6  → <b>100%</b> (+2)
+change talk      4 / (4 + 2) → <b>67%</b>
+reflections ÷ questions 3 / 6 → <b>0.50</b>
+no LLM involved: same codes, same score</pre>
+        </div>
+        <span class="ms tr-arrow fragment rise" data-fragment-index="5">arrow_forward</span>
+        <div class="trace-step agent fragment rise" data-fragment-index="5">
+          <div class="ts-head"><span class="n">5</span>Supervisor agent output</div>
+          <pre class="code-row">strength: "Evoked discrepancy with
+           her future goals"
+skill:    <b>eliciting_change_talk</b>
+turn_ids: <b>[8, 9]</b>   ← ids only, no quotes</pre>
+        </div>
+        <span class="ms tr-arrow fragment rise" data-fragment-index="6">arrow_forward</span>
+        <div class="trace-step report fragment rise" data-fragment-index="6">
+          <div class="ts-head"><span class="n">6</span>Report: code inserts the evidence</div>
+          <div class="ev"><span class="ts">▶ 02:29</span><span>Clinician: “How do you see vaping influencing your performance…?”</span></div>
+          <div class="ev"><span class="ts">▶ 02:44</span><span>Client: “I felt out of breath and super tired.”</span></div>
+        </div>
+      </div>
+      <div class="better-strip fragment rise" data-fragment-index="7">
+        <div class="bs-left"><span class="chip cat">persuasion without permission</span><b>“Ask before offering strategies”</b><span class="ts">▶ 03:18</span></div>
+        <div class="better"><span class="lbl">Try instead</span>“I do have a couple of stress-management ideas… Would it be okay if I shared a few, and then you can tell me what, if anything, fits for you?”</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Let's follow one real moment. At 2:29, Content Understanding returns Speaker 1 with a millisecond timestamp, and the clinician field tells us Speaker 1 is the clinician. The Coder labels it an open question with an affirmation, and gives a one-line reason. Mia's reply is coded as change talk. Python turns those codes into the metrics. The Supervisor calls this a strength, evoking discrepancy with her goals, and cites turns 8 and 9 by number only. Our code then inserts the exact quote and the clickable timestamp. So the feedback can't misquote the session. It also coaches: at 3:18 the clinician offered advice without asking, and MIRA suggests what she could have said instead.</aside>
+</section>
+
+<!-- ================= S7 · DEMO ================= -->
+<section id="s7" data-bg="dark" data-progress="Demo">
+  <div class="frame dark">
+    <h2 class="title">Demo: <em>Mia's session</em> in the MIRA app</h2>
+    <div class="body">
+      <div class="row s7-row">
+        <div class="shots">
+          <figure class="shot zoom s-over"><img src="assets/img/app-overview.png" alt="MIRA overview: 8/12 Basic proficiency, empathy 3.5, collaboration 3.5, change talk 67%"><figcaption>2 · Overview</figcaption></figure>
+          <div class="shots-row">
+            <figure class="shot zoom s-feed"><img src="assets/img/app-feedback.png" alt="Feedback tab with timestamped strengths and improvements"><figcaption>3 · Feedback</figcaption></figure>
+            <figure class="shot zoom s-trans"><img src="assets/img/app-transcript.png" alt="Transcript filtered to change talk with Coder reasons"><figcaption>5 · Transcript</figcaption></figure>
+            <figure class="shot zoom s-dyn"><img src="assets/img/app-dynamics.png" alt="Session dynamics: change talk overtakes sustain talk"><figcaption>6 · Dynamics</figcaption></figure>
+          </div>
+        </div>
+        <ol class="demo-steps">
+          <li><b>Open the saved report</b><span>Sidebar → Saved report → Mia. No Azure call needed.</span></li>
+          <li><b>Overview</b><span>8 / 12 Basic · Empathy 3.5 · Collaboration 3.5 · change talk 67%</span></li>
+          <li><b>Feedback</b><span>Click ▶ 02:29: the video jumps to the moment. Read a “try instead”.</span></li>
+          <li><b>Scorecard</b><span>R:Q 0.50 is below Basic; every metric shows AnnoMI medians for good and poor sessions.</span></li>
+          <li><b>Transcript</b><span>Filter <i>Change talk</i>: every code comes with a one-line reason.</span></li>
+          <li><b>Session dynamics</b><span>Change talk overtakes sustain talk.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Switch to the app. (1) Sidebar: Saved report, choose Mia, Open report. It loads instantly with no Azure call. (2) Overview: 8 out of 12, Basic; empathy and collaboration 3.5; change talk 67%. (3) Feedback tab: click the 02:29 button under "Evoked discrepancy with her future goals" and let the video play for about 5 seconds. Then show "Ask before offering strategies" and read the Try instead. (4) Scorecard: R:Q 0.50 is below Basic, which is exactly the coaching point; each metric shows how expert-rated good and poor AnnoMI sessions score. (5) Transcript: filter Change talk; every code has a one-line reason. (6) Session dynamics: change talk overtakes sustain talk. A full new analysis takes about one to one and a half minutes for a three-minute clip. If the app isn't available, these screenshots are the fallback.</aside>
+</section>
+
+<!-- ================= S8 · WHO IT HELPS ================= -->
+<section id="s8" data-progress="Impact">
+  <div class="frame">
+    <h2 class="title">Who it helps: <em>coaching for clinicians</em>, triage for supervisors</h2>
+    <div class="body">
+      <div class="row personas">
+        <div class="card persona">
+          <div class="p-head"><span class="icon-badge"><span class="ms">medical_services</span></span><h3>Clinician</h3></div>
+          <p class="need">“What should I say differently next time?”</p>
+          <div class="pill today"><b>Today</b>Score, strengths and traps with ▶ timestamps, plus a “try instead” line for each improvement, minutes after the session.</div>
+        </div>
+        <div class="card persona">
+          <div class="p-head"><span class="icon-badge azure"><span class="ms">supervisor_account</span></span><h3>Supervisor / MI trainer</h3></div>
+          <p class="need">“I can't listen to every recording.”</p>
+          <div class="pill today"><b>Today</b>An evidence-linked scorecard and coded transcript to pick which sessions need a closer look. Time goes into coaching, not counting.</div>
+        </div>
+        <div class="card persona">
+          <div class="p-head"><span class="icon-badge amber"><span class="ms">monitoring</span></span><h3>Programme / clinical lead</h3></div>
+          <p class="need">“Is our MI training working?”</p>
+          <div class="pill intended"><b>Intended</b>Team-level MI-fidelity trends from the same scores. Not built yet: on the roadmap.</div>
+        </div>
+      </div>
+      <div class="row s8-bottom">
+        <div class="card tight uses">
+          <div class="eyebrow">MI is used in behaviour-change care</div>
+          <div class="chips-wrap">
+            <span class="chip soft-teal">smoking &amp; vaping</span><span class="chip soft-teal">alcohol &amp; substance use</span>
+            <span class="chip soft-teal">medication adherence</span><span class="chip soft-teal">diet &amp; exercise</span><span class="chip soft-teal">chronic conditions, e.g. asthma</span>
+          </div>
+        </div>
+        <div class="card tight guard">
+          <div class="eyebrow">Guardrails</div>
+          <p><span class="ms">verified</span>Built on the MITI 4.2.1 standard</p>
+          <p><span class="ms">person_check</span>Rates the clinician's technique, never the client</p>
+          <p><span class="ms">school</span>A coaching aid, not a certification or clinical decision tool</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Who uses it? The clinician gets specific, timestamped feedback and better phrasings minutes after the session, which is what drives skill. The supervisor or MI trainer can't listen to every recording; MIRA gives an evidence-linked scorecard so they can choose which sessions need a closer look, and spend their time coaching instead of counting. For programme leads, team-level trends are the intended next step; they're not built yet. MI is used across behaviour-change care: smoking, alcohol, medication adherence, diet and chronic disease. MIRA is a coaching aid built on MITI 4.2.1. It rates the clinician's technique, never the client, and it isn't a certification.</aside>
+</section>
+
+<!-- ================= S9 · ANNOMI ================= -->
+<section id="s9" data-progress="Evidence">
+  <div class="frame">
+    <h2 class="title">AnnoMI: the <em>expert answer key</em> we test against</h2>
+    <div class="body">
+      <div class="row s9-row">
+        <div class="card dataset">
+          <div class="eyebrow">The dataset</div>
+          <div class="ds-big"><span class="v">133</span><span class="l">MI demonstration transcripts<br>(public YouTube videos)</span></div>
+          <div class="ds-facts">
+            <p><span class="ms">thumbs_up_down</span><span><b>110 high · 23 low</b> quality, rated by experts</span></p>
+            <p><span class="ms">sell</span><span><b>Every utterance coded</b>: question, reflection, clinician input, client talk</span></p>
+            <p><span class="ms">groups</span><span><b>7 transcripts coded by all 10 experts</b>: gives a majority vote and a human-agreement level</span></p>
+          </div>
+        </div>
+        <div class="col grow s9-mid">
+          <div class="card split">
+            <div class="eyebrow">How we used it</div>
+            <div class="split-bar">
+              <span class="seg prompt" style="flex:2"></span><span class="seg test" style="flex:27"></span><span class="seg unused" style="flex:104"></span>
+            </div>
+            <div class="split-legend">
+              <p><span class="sw prompt"></span><span><b>2</b> transcripts as prompt examples (60, 131)</span></p>
+              <p><span class="sw test"></span><span><b>27</b> held out for testing: 17 high / 10 low · <b>1,276</b> turns</span></p>
+              <p><span class="sw unused"></span><span><b>104</b> not used</span></p>
+            </div>
+            <div class="callout teal sm-callout"><span class="ms">lock</span>Test transcripts never appear in a prompt. A unit test guards against leakage.</div>
+          </div>
+          <div class="checks">
+            <div class="check"><span class="ck-n">1</span><div><b>Listen</b><span>Content Understanding transcript vs the expert transcript of the same video</span></div></div>
+            <div class="check"><span class="ck-n">2</span><div><b>Code</b><span>Coder labels vs expert labels, turn by turn</span></div></div>
+            <div class="check"><span class="ck-n">3</span><div><b>Score</b><span>0–12 score vs the expert's high / low quality rating</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">How do we know it works? We grade MIRA against AnnoMI: 133 MI demonstration transcripts, 110 rated high and 23 low quality by experts, with every utterance coded by an expert. Seven of them were coded independently by all ten experts, which tells us how much experts agree with each other. Only two transcripts ever go into our prompts; 27 others, with 1,276 turns, are held out for testing. We run three checks, one per stage: listen, code and score. Checks 2 and 3 start from the expert's transcript text, so transcription errors can't leak in.</aside>
+</section>
+
+<!-- ================= S10 · ACU ================= -->
+<section id="s10" data-progress="Evidence">
+  <div class="frame">
+    <h2 class="title">Check 1 · Listen: Content Understanding <em>hears the session right</em></h2>
+    <div class="body">
+      <div class="row s10-kpis">
+        <div class="card kpi"><span class="v">10%</span><span class="l"><b>word error rate</b><br>held-out AnnoMI video 27 (3.5 min)</span></div>
+        <div class="card kpi"><span class="v">100%</span><span class="l"><b>speaker roles correct</b><br>clinician vs client, by word</span></div>
+        <div class="card kpi alt"><span class="v sm">10.8%</span><span class="l"><b>second video</b> (AnnoMI 23, 12 min)<br>word error rate; roles 99.7% correct</span></div>
+      </div>
+      <div class="card wer-card">
+        <div class="eyebrow">Why 10% is better than it sounds: one real line</div>
+        <div class="wer-grid">
+          <span class="wer-k">Expert transcript</span>
+          <p class="wer-t"><del>Mm-hmm.</del> Yeah, I <del>de-I</del> definitely don't <del>wanna</del> come back here.</p>
+          <span class="wer-k">Content Understanding</span>
+          <p class="wer-t">Yeah, I definitely don't <ins>want to</ins> come back here.</p>
+        </div>
+        <p class="wer-note"><b>6 of 12 words count as errors (50% WER), yet the meaning is identical.</b> Much of the error rate is fillers and false starts that the human transcriber kept.</p>
+      </div>
+      <p class="foot">WER = (substituted + deleted + inserted words) ÷ expert words. A sanity check on two videos, not a benchmark: Content Understanding also merges very short interjections such as “Mm-hmm” into neighbouring turns.</p>
+    </div>
+  </div>
+  <aside class="notes">Check one: does it hear the session right? We ran the full pipeline on a held-out AnnoMI video and compared it with the expert's transcript of the same video. About 10% word error rate, and speaker roles 100% correct. On a second, 12-minute video: 10.8% and 99.7%. And 10% is better than it sounds. In this real line, half the words count as errors, but the meaning is identical: the human transcriber kept fillers like "Mm-hmm" and "wanna". This is a sanity check on two videos, not a benchmark.</aside>
+</section>
+
+<!-- ================= S11 · CONFUSION ================= -->
+<section id="s11" data-progress="Evidence">
+  <div class="frame">
+    <h2 class="title">Check 2 · Code: where MIRA <em>agrees</em>, and where it doesn't</h2>
+    <div class="body">
+      <p class="lede">27 held-out transcripts · rows = expert label · columns = MIRA's label · <b>diagonal = agreement</b> · cell shading = % of the row</p>
+      <div class="row s11-row">
+        <div class="card cm-card">
+          <div class="cm-title"><b>Reflections</b><span class="muted">644 clinician turns</span></div>
+          <table class="cm" data-rows="none,simple,complex" data-cols="none,simple,complex" data-values="441,13,6;13,49,12;8,36,66"></table>
+          <div class="cm-note"><span class="ms">check_circle</span><span>Spotting <i>whether</i> there's a reflection is easy: <b>96%</b> of “none” rows agree.</span></div>
+          <div class="cm-note warn"><span class="ms">error</span><span>Depth is the hard call: <b>36 of 110</b> complex reflections were coded simple.</span></div>
+        </div>
+        <div class="card cm-card">
+          <div class="cm-title"><b>Client talk</b><span class="muted">632 client turns</span></div>
+          <table class="cm" data-rows="sustain,neutral,change" data-cols="sustain,neutral,change" data-values="70,8,1;34,349,51;6,19,94"></table>
+          <div class="cm-note"><span class="ms">check_circle</span><span>Sustain talk is rarely missed (<b>89%</b>); change talk caught <b>79%</b> of the time.</span></div>
+          <div class="cm-note warn"><span class="ms">error</span><span>MIRA is generous with change talk: <b>51</b> expert-neutral turns coded as change.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Check two: is the Coder right? On 27 transcripts it has never seen, we compare MIRA's label with the expert's for every turn. Read along the diagonal: that's agreement. Left, reflections. Whether there's a reflection at all is easy, but how deep it is, simple or complex, is the hard call: 36 of 110 complex reflections were called simple. Right, client talk. MIRA rarely misses sustain talk, but it's a little generous with change talk, labelling 51 neutral turns as change. The confusion matrix is also how we tuned the prompts.</aside>
+</section>
+
+<!-- ================= S12 · KAPPA ================= -->
+<section id="s12" data-progress="Evidence">
+  <div class="frame">
+    <h2 class="title">Check 2 · Code: as consistent as <em>the experts themselves</em></h2>
+    <div class="body">
+      <div class="row s12-top">
+        <div class="card tight kdef"><span class="icon-badge"><span class="ms">balance</span></span><p><b>Cohen's κ</b> = agreement after removing lucky guesses. 0 = chance · 1 = perfect. A lazy coder that calls every client turn “neutral” gets <b>69% accuracy but κ = 0</b>.</p></div>
+        <div class="card tight kset"><span class="icon-badge ink"><span class="ms">groups</span></span><p>Measured on the <b>7 sessions coded by all 10 experts</b> (216 clinician · 212 client turns)</p></div>
+      </div>
+      <div class="row s12-panels">
+        <div class="card dumb-card">
+          <div class="dc-head"><span class="tag ai">headline</span><b>MIRA as an 11th coder</b><span class="muted">average κ against each individual expert</span></div>
+          <div class="dumbbell" data-rows="Behaviour type|0.74|0.80;Reflection none / simple / complex|0.50|0.61;Question none / open / closed|0.74|0.78;Clinician input type|0.51|0.57;Client talk change / neutral / sustain|0.47|0.56"></div>
+          <div class="legend"><span><i class="dot h"></i>expert vs expert (45 pairs)</span><span><i class="dot m"></i>MIRA vs each expert (10)</span></div>
+        </div>
+        <div class="card dumb-card">
+          <div class="dc-head"><span class="tag py">consensus</span><b>Against the 10-expert majority vote</b><span class="muted">a cleaner reference</span></div>
+          <div class="dumbbell" data-rows="Behaviour type|0.81|0.88;Reflection none / simple / complex|0.57|0.76;Question none / open / closed|0.80|0.87;Clinician input type|0.63|0.69;Client talk change / neutral / sustain|0.58|0.72"></div>
+          <div class="legend"><span><i class="dot h"></i>each expert vs the other 9 (“human ceiling”)</span><span><i class="dot m"></i>MIRA vs the majority</span></div>
+        </div>
+      </div>
+      <p class="foot">Compare within a panel, not across: a single expert is noisier than a consensus. Across all 27 held-out transcripts (1,276 turns), MIRA reaches κ 0.85 on behaviour type. Model: gpt-5.4, low reasoning effort.</p>
+    </div>
+  </div>
+  <aside class="notes">Is that good? Kappa measures agreement after removing lucky guesses: a lazy coder that says "neutral" every time gets 69% accuracy but kappa zero. We use the seven sessions that all ten experts coded. Left, the strictest test: treat MIRA as an eleventh coder and compare it with each expert individually. On all five code families, MIRA agrees with any single expert more than experts agree with each other. Right, against the ten-expert majority vote: same picture, MIRA is at or above the human ceiling everywhere. Compare within a panel, not across.</aside>
+</section>
+
+<!-- ================= S13 · SUPERVISOR ================= -->
+<section id="s13" data-progress="Evidence">
+  <div class="frame">
+    <h2 class="title">Check 3 · Score: MIRA's scores <em>separate good from poor MI</em></h2>
+    <div class="body">
+      <div class="row s13-row">
+        <div class="card chart-card"><div class="chart-h"><b>MIRA proficiency score for 27 held-out sessions</b><span class="muted small">each dot = one session</span></div><div class="cwrap"><canvas id="chart-sep"></canvas></div></div>
+        <div class="col s13-side">
+          <div class="card tight fact"><span class="v coral">≤ 3</span><p>points for <b>all 10</b> expert-rated <b>poor</b> sessions</p></div>
+          <div class="card tight fact"><span class="v">≥ 4</span><p>points for <b>15 of 17</b> expert-rated <b>good</b> sessions</p></div>
+          <div class="card tight fact"><span class="v">164<small>/170</small></span><p>good-vs-poor pairs ranked the right way (4 ties, 2 reversed)</p></div>
+          <div class="card tight fact note"><span class="ms">tips_and_updates</span><p>In good sessions it flags <b>missed opportunities</b>; in poor ones, <b>confrontation and persuasion</b>.</p></div>
+        </div>
+      </div>
+      <p class="foot">MIRA never sees the expert's quality label (input: expert transcript text). The bands are strict: 8 of 17 good demo sessions still land in “Developing”. The score ranks sessions well, but its cut-offs are demanding.</p>
+    </div>
+  </div>
+  <aside class="notes">Check three: does the final score mean anything? AnnoMI has no expert empathy numbers, only a high or low quality label per session. MIRA never sees that label. Each dot is one held-out session. All ten poor sessions score 3 or less; 15 of 17 good sessions score 4 or more; averages 6.8 versus 1.1. In 164 of 170 good-versus-poor pairs, the good session scores higher. Interestingly, in good sessions the Supervisor mostly flags missed opportunities, while in poor ones it flags confrontation and persuasion. Honest note: our bands are strict, so some good demo sessions still land in Developing.</aside>
+</section>
+
+<!-- ================= S14 · COST & PRIVACY ================= -->
+<section id="s14" data-progress="Trust">
+  <div class="frame">
+    <h2 class="title">Affordable, and <em>kept inside our Azure</em></h2>
+    <div class="body">
+      <div class="card cost-ribbon">
+        <div class="cost-k"><span class="icon-badge"><span class="ms">payments</span></span><div><b>Cost per review</b><span class="muted">measured on 2 real runs</span></div></div>
+        <div class="cost-v"><span class="v">≈ $0.09</span><span class="l">Mia · 3.1 min of audio</span></div>
+        <div class="cost-v"><span class="v">≈ $0.08</span><span class="l">Sal · 3.5 min of audio</span></div>
+        <div class="cost-split">
+          <div class="bar"><span class="llm" style="flex:70">gpt-5.4 agents ~70%</span><span class="cu" style="flex:30">audio ~30%</span></div>
+          <span class="muted">Azure list prices, Global Standard, pay-as-you-go · ~1–1.5 min per review</span>
+        </div>
+      </div>
+      <div class="row s14-grid">
+        <div class="card sec today">
+          <div class="sec-h"><span class="ms">verified_user</span><b>In the prototype today</b></div>
+          <ul>
+            <li>Only the <b>audio</b> is uploaded; video frames stay on the machine</li>
+            <li>All AI runs in <b>our own Microsoft Foundry resource</b>: no third-party AI APIs</li>
+            <li><b>Entra ID</b> sign-in to Azure, or keys in a git-ignored file</li>
+            <li>LLM calls sent with <b>store = false</b></li>
+            <li>Quotes and timestamps <b>inserted by code</b>, never generated</li>
+            <li>Built on <b>public demo videos</b>: no patient data</li>
+          </ul>
+        </div>
+        <div class="card sec azure">
+          <div class="sec-h"><span class="ms">cloud_done</span><b>Azure platform</b></div>
+          <ul>
+            <li>Azure OpenAI and Content Understanding are <b>HIPAA-eligible</b>, in scope of Microsoft's <b>BAA</b></li>
+            <li>Prompts and outputs are <b>not used to train</b> foundation models</li>
+            <li>Data <b>encrypted</b> in transit and at rest</li>
+            <li>Global Standard: stored data stays in our geography; inference may run in any Azure region</li>
+          </ul>
+        </div>
+        <div class="card sec pilot">
+          <div class="sec-h"><span class="ms">rocket_launch</span><b>Before real patient data</b></div>
+          <ul>
+            <li><b>Eligible ≠ compliant</b>: we must configure the safeguards</li>
+            <li>Hosted app with <b>Entra sign-in</b> and role-based access</li>
+            <li>Private endpoints, <b>Key Vault</b>, managed identity</li>
+            <li>Encrypted storage with <b>retention and deletion</b></li>
+            <li><b>Consent</b> from clinician and client</li>
+          </ul>
+        </div>
+      </div>
+      <p class="foot">Today the app is a local Streamlit prototype with no login; recordings, transcripts and reports are kept on the local disk.</p>
+    </div>
+  </div>
+  <aside class="notes">Cost, measured on two real runs: about 9 and 8 cents for a three-minute session, at Azure list prices. Roughly 70% is the gpt-5.4 agents' output, 30% is audio. On privacy and security: today only the audio leaves the machine, and all AI runs in our own Microsoft Foundry resource, with Entra ID sign-in and no third-party AI APIs. LLM calls aren't stored, and quotes are inserted by code. The two Azure services we use are HIPAA-eligible and in scope of Microsoft's BAA, and our prompts aren't used for training. Being eligible isn't the same as being compliant, though. Before real patient data we'd add a hosted app with sign-in, private networking, Key Vault, retention and deletion, and consent.</aside>
+</section>
+
+<!-- ================= S15 · CLOSE ================= -->
+<section id="s15" data-bg="dark">
+  <div class="frame dark">
+    <h2 class="title">What's proven, and <em>what's next</em></h2>
+    <div class="body">
+      <div class="row closing">
+        <div class="cl proven">
+          <div class="cl-h"><span class="ms fill">check_circle</span>Proven on AnnoMI</div>
+          <p>Codes turns at or above the human level, on <b>5 of 5</b> code families</p>
+          <p>Ranks good above poor MI in <b>164 of 170</b> pairs</p>
+          <p><b>479 / 479</b> cited turns are real: no invented evidence</p>
+          <p>About <b>9¢</b> and ~1.5 min per 3-minute review</p>
+        </div>
+        <div class="cl gaps">
+          <div class="cl-h"><span class="ms fill">report</span>Honest gaps</div>
+          <p>Simple vs complex reflection is hard (experts agree only κ 0.22), so scores can shift <b>1–2 points</b> between runs</p>
+          <p>Tested on <b>demonstration videos</b>, not real clinical sessions</p>
+          <p>Words only: no tone, pauses or body language yet</p>
+        </div>
+        <div class="cl next">
+          <div class="cl-h"><span class="ms fill">rocket_launch</span>Next</div>
+          <p><b>3-run majority vote</b> in the Coder for stable scores</p>
+          <p><b>Pilot</b> on consented real sessions, coded by MITI experts</p>
+          <p><b>Voice features</b>: talk time, pauses, interruptions</p>
+        </div>
+      </div>
+      <div class="thanks-row">
+        <span class="thanks">Thank you</span>
+        <span class="team-line">Team PhoenixAI · Rahul Nakka · Deependra Shekhawat</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">To close. On AnnoMI, MIRA codes at or above the level of human experts, ranks good above poor sessions almost every time, and never invents evidence, for about nine cents per short review. Honest gaps: simple versus complex reflections are hard even for experts, so scores can move a point or two between runs; we've only tested on demonstration videos; and we use words only. Next: a three-run majority vote for stable scores, a consented pilot on real sessions, and voice features. Thank you.</aside>
+</section>
+
+</div></div>
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/notes.js"></script>
+<script src="vendor/chart/chart.umd.min.js"></script>
+<script src="js/deck.js"></script>
+</body>
+</html>

@@ -30,3 +30,5 @@ screenshots/
 # Presentation deck (dependencies and generated test screenshots)
 presentation/node_modules/
 presentation/test-output/
+presentation_v2/node_modules/
+presentation_v2/test-output/

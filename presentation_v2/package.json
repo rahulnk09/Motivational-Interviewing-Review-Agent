@@ -1,0 +1,16 @@
+{
+  "name": "mira-deck-v2",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MIRA hackathon screening deck v2 (reveal.js + Chart.js), fully offline, with automated layout checks",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node tests/check-deck.mjs",
+    "pdf": "node scripts/export-pdf.mjs",
+    "shots": "node scripts/app-screenshots.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.0"
+  }
+}
