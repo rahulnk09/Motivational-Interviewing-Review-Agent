@@ -141,7 +141,7 @@ flowchart TB
 | `responses.create` + `model_validate_json(output_text)` | The SDK's `responses.parse` fails when gpt-5.4 splits its JSON across several output chunks. |
 | Few-shot examples from **at most 2 AnnoMI transcripts** | Keeps the prompt small (~1.4k tokens) while covering all 15 labels. The rest of AnnoMI is used only for offline evaluation, never in prompts. |
 | Static prompt first, transcript last | Azure OpenAI prompt caching: about 75–85% of input tokens are cached on repeat calls. |
-| gpt-5.4 for the Coder (not mini) | It beat gpt-5.4-mini clearly on the codes the rubric depends on (κ 0.86 vs 0.76 for main behaviour, 0.68 vs 0.55 for reflection type). |
+| gpt-5.4 for the Coder (not mini) | It beat gpt-5.4-mini clearly on the codes the rubric depends on (κ 0.85 vs 0.78 for main behaviour, 0.70 vs 0.57 for reflection type, 0.64 vs 0.55 for client talk). |
 
 ---
 
@@ -480,7 +480,7 @@ The Coder runs on the expert transcript **text** (no CU), and every turn is comp
 
 - **Accuracy**: share of turns labelled the same as the expert.
 - **Macro-F1**: F1 averaged over labels, so rare labels (sustain talk, advice) count as much as common ones.
-- **Cohen's κ (kappa)**: agreement corrected for chance (0 = chance, 0.4–0.6 moderate, 0.6–0.8 substantial, 1 = perfect). Accuracy alone can mislead: always answering "neutral" would score 60% accuracy but κ = 0.
+- **Cohen's κ (kappa)**: agreement corrected for chance (0 = chance, 0.4–0.6 moderate, 0.6–0.8 substantial, 1 = perfect). Accuracy alone can mislead: always answering "neutral" for client turns would score 64% accuracy across AnnoMI (69% on the eval set) but κ = 0.
 - **Confusion matrix**: rows are the expert label, columns the model label; off-diagonal cells show which labels get mixed up. This is how prompts are tuned.
 - **Human ceiling**: κ of each expert against the majority of the other 9. A model near this level is as consistent as the experts are with each other.
 - **Session-level**: MAE and Spearman correlation of R:Q, %OQ, %CR and change talk ratio (predicted vs expert labels), and their AUC for high vs low quality.
@@ -498,7 +498,7 @@ AnnoMI has no expert Empathy or Collaboration numbers, only a high/low quality l
 - **AUC**: the probability that a random high-quality session scores higher than a random low-quality one (1.0 = perfect, 0.5 = coin flip). Reported for the proficiency score, Empathy, Collaboration and their mean.
 - Mean score and band distribution by quality.
 - **Citation validity**: share of cited turn ids that are real.
-- **Stability**: 3 sessions are re-run and the score differences reported.
+- **Stability**: 3 sessions (2 high, 1 low) are supervised a second time and the score differences reported. The Coder output is reused from the cache, so this measures **Supervisor** variance only, not end-to-end variance (see section 15).
 - Trap types found in high vs low sessions, plus latency and tokens.
 
 ### 9.4 `eval-ingest`: does the audio front end work?
@@ -521,25 +521,35 @@ The full pipeline runs on the real video and is compared with the expert transcr
 
 ### Coder (27 held-out transcripts, 644 therapist and 632 client turns)
 
-| Label | gpt-5.4-mini κ | **gpt-5.4 κ (default)** | Human ceiling κ |
-|---|---|---|---|
-| Main behaviour | 0.76 | **0.86** | 0.81 |
-| Reflection none/simple/complex | 0.55 | **0.68** | 0.57 |
-| Question none/open/closed | 0.77 | **0.77** | 0.80 |
-| Client change/sustain/neutral | 0.61 | **0.66** | 0.58 |
-| Seconds per session | 19 | 36 | – |
+Prompt version `36aca3fa`, re-run on 2026-11-12. The human ceiling exists only for the 7 transcripts coded by all 10 experts, so the **like-for-like** comparison is the "7 multi-annotator" column.
 
-- **Prompt tuning lesson:** AnnoMI experts code bare assents ("Yes.", "Okay.") as *neutral* talk. Adding that rule raised client-talk κ from 0.47 to 0.61.
-- **Session level (gpt-5.4):** change talk ratio has Spearman correlation 0.89 with the expert figure (AUC 0.85); R:Q has 0.82 (AUC 0.83).
+| Label | gpt-5.4-mini κ (all 27) | **gpt-5.4 κ (all 27)** | gpt-5.4 κ (7 multi-annotator) | Human ceiling κ (same 7) |
+|---|---|---|---|---|
+| Main behaviour | 0.78 | **0.85** | 0.88 | 0.81 |
+| Reflection none/simple/complex | 0.57 | **0.70** | 0.76 | 0.57 |
+| Question none/open/closed | 0.78 | **0.78** | 0.87 | 0.80 |
+| Therapist input type | 0.54 | **0.57** | 0.69 | 0.63 |
+| Client change/sustain/neutral | 0.55 | **0.64** | 0.72 | 0.58 |
+| Seconds per session | 9 | 38 | – | – |
 
-### Supervisor and proficiency score (27 held-out transcripts)
+- **Like-for-like:** on the 7 transcripts coded by all 10 experts, gpt-5.4 is above the human ceiling on all five code families.
+- **Simple vs complex only** (turns where both the expert and the model found a reflection): κ 0.42, against a human ceiling of 0.22. This is the hardest judgement, for experts too. 36 of the 110 expert-complex reflections were coded simple.
+- **Run-to-run variation:** an earlier run of the same evaluation gave 0.86 / 0.68 / 0.77 / 0.58 / 0.66, so expect about ±0.02 κ between runs.
+- **Prompt tuning lesson:** AnnoMI experts code bare assents ("Yes.", "Okay.") as *neutral* talk. Adding that rule raised client-talk κ by about 0.14 on gpt-5.4-mini (0.47 → 0.61 in the run where the rule was introduced; that older prompt version was not re-run).
+- **Session level (gpt-5.4):** change talk ratio has Spearman correlation 0.94 with the expert figure (AUC 0.83); R:Q has 0.85 (AUC 0.89). % complex reflections tracks the expert figure poorly (Spearman 0.33), which is a consequence of the simple vs complex difficulty.
 
-| Check | Result |
+### Supervisor and proficiency score (27 held-out transcripts: 17 high, 10 low)
+
+| Check | Result (re-run 2026-11-12) |
 |---|---|
-| AUC high vs low: proficiency score / Empathy / Collaboration | **0.994** / 0.98 / 1.00 |
-| Mean proficiency, high vs low sessions | 6.7 vs 1.0 points |
-| Citation validity | 100% (0 items dropped) |
-| Re-run stability (3 sessions) | identical scores |
+| AUC high vs low: proficiency score / Empathy / Collaboration / mean of both | **0.976** / 0.988 / 0.994 / 1.00 |
+| Pairs (high vs low, 170 total) | 164 correctly ordered, 4 tied, 2 reversed |
+| Mean proficiency, high vs low sessions | 6.8 vs 1.1 points |
+| Bands, high-quality sessions | 2 Advanced, 7 Basic, 8 Developing (all 10 low-quality sessions: Developing) |
+| Citation validity | 100% (479 / 479 cited turn ids; 0 items dropped) |
+| Supervisor re-run stability (3 sessions, same Coder output) | proficiency points identical; one Collaboration rating moved by 1.0 (transcript 9) |
+
+An earlier run gave AUC 0.994 / 0.98 / 1.00. The stability check reuses the cached Coder output, so it says nothing about Coder variance (see section 15).
 
 ### Audio front end (gold video 27)
 

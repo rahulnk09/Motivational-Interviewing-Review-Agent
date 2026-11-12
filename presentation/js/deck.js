@@ -100,7 +100,7 @@
         data: {
           labels: [["Main clinician", "behaviour"], ["Reflection", "none / simple / complex"], ["Client talk", "change / sustain / neutral"], ["Question", "none / open / closed"], ["Clinician", "input type"]],
           datasets: [
-            { label: "MIRA (gpt-5.4)", data: [0.86, 0.68, 0.66, 0.77, 0.58], backgroundColor: C.teal, borderRadius: 6, barPercentage: 0.82, categoryPercentage: 0.78 },
+            { label: "MIRA (gpt-5.4)", data: [0.88, 0.76, 0.72, 0.87, 0.69], backgroundColor: C.teal, borderRadius: 6, barPercentage: 0.82, categoryPercentage: 0.78 },
             { label: "Human ceiling", data: [0.81, 0.57, 0.58, 0.80, 0.63], backgroundColor: C.slate, borderRadius: 6, barPercentage: 0.82, categoryPercentage: 0.78 },
           ],
         },
@@ -123,8 +123,8 @@
           return { x: x + (k - (totals[v] - 1) / 2) * 0.07, y: v };
         });
       };
-      const high = [2, 4, 4, 5, 5, 6, 6, 7, 7, 7, 7, 7, 8, 8, 9, 9, 12];
-      const low = [0, 0, 1, 1, 1, 1, 1, 1, 1, 3];
+      const high = [2, 2, 4, 5, 6, 6, 6, 6, 7, 8, 8, 8, 9, 9, 9, 10, 11];
+      const low = [0, 0, 0, 1, 1, 1, 1, 2, 2, 3];
       const bands = {
         id: "bands",
         beforeDatasetsDraw(chart) {
@@ -137,7 +137,7 @@
         },
         afterDatasetsDraw(chart) {
           const { ctx, scales: { x, y } } = chart;
-          [[1, 6.65, C.teal, "mean 6.65"], [2, 1.0, C.coral, "mean 1.0"]].forEach(([cx, m, color, label]) => {
+          [[1, 6.82, C.teal, "mean 6.8"], [2, 1.1, C.coral, "mean 1.1"]].forEach(([cx, m, color, label]) => {
             const py = y.getPixelForValue(m);
             ctx.strokeStyle = C.ink; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(x.getPixelForValue(cx - 0.42), py); ctx.lineTo(x.getPixelForValue(cx + 0.42), py); ctx.stroke();

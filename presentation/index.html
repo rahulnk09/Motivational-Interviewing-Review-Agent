@@ -373,7 +373,7 @@
       <p class="foot">Wu et al., “Anno-MI: A Dataset of Expert-Annotated Counselling Dialogues”, ICASSP 2022.</p>
     </div>
   </div>
-  <aside class="notes">Our answer key is AnnoMI: 133 real MI demonstrations labelled by 10 experts. Four jobs: teaches the Coder, calibrates the Supervisor, benchmarks the clinician, grades MIRA. Only two transcripts ever go into prompts; the rest are kept strictly for testing.</aside>
+  <aside class="notes">Our answer key is AnnoMI: 133 real MI demonstrations, every turn coded by experts, and seven of them coded independently by ten experts. Four jobs: teaches the Coder, calibrates the Supervisor, benchmarks the clinician, grades MIRA. Only two transcripts ever go into prompts; the rest are kept strictly for testing.</aside>
 </section>
 
 <!-- ================= S12 · CODER ================= -->
@@ -449,7 +449,7 @@
           <div class="ch q"><span class="ts">▶ 03:09</span> “…maybe I could try to cut back…”</div>
           <span class="ms ch-arrow">south</span>
           <div class="ch vid"><span class="ms fill">play_circle</span>video seeks to 03:09</div>
-          <div class="stat sm"><div class="v">100%</div><div class="l">valid citations (483 / 483)</div></div>
+          <div class="stat sm"><div class="v">100%</div><div class="l">valid citations (479 / 479)</div></div>
         </div>
         <div class="card trap-card big-trap grow">
           <div class="tc-head"><b>Reflect the change talk before moving to solutions</b></div>
@@ -497,7 +497,7 @@
           <div class="yc-head"><span class="icon-badge"><span class="ms">balance</span></span><h3>Cohen's kappa (κ)</h3></div>
           <p>Agreement <b>beyond chance</b>. A coder answering “neutral” every time scores 64% accuracy but <b>κ = 0</b>.</p>
           <div class="kscale"><div class="kbar"></div><div class="kt"><span style="left:0">0 chance</span><span style="left:40%">0.4 moderate</span><span style="left:60%">0.6 substantial</span><span style="left:80%">0.8 almost perfect</span></div></div>
-          <div class="ours"><span class="ms">arrow_forward</span>MIRA: κ 0.86 on main clinician behaviour</div>
+          <div class="ours"><span class="ms">arrow_forward</span>MIRA: κ 0.85 on main clinician behaviour</div>
         </div>
         <div class="card yc">
           <div class="yc-head"><span class="icon-badge"><span class="ms">groups</span></span><h3>Human ceiling</h3></div>
@@ -509,7 +509,7 @@
           <div class="yc-head"><span class="icon-badge"><span class="ms">swap_vert</span></span><h3>AUC</h3></div>
           <p>Pick one good and one poor session at random: how often does MIRA score the good one higher?</p>
           <div class="auc-vis"><span><span class="ms">toll</span>0.5 = coin flip</span><span class="ms arrow">arrow_forward</span><span class="teal"><span class="ms">my_location</span>1.0 = always</span></div>
-          <div class="ours"><span class="ms">arrow_forward</span>MIRA: AUC 0.994 on the proficiency score</div>
+          <div class="ours"><span class="ms">arrow_forward</span>MIRA: AUC 0.98 on the proficiency score</div>
         </div>
         <div class="card yc">
           <div class="yc-head"><span class="icon-badge"><span class="ms">record_voice_over</span></span><h3>Word error rate (WER)</h3></div>
@@ -526,19 +526,19 @@
 <!-- ================= S16 · CODER VS EXPERTS ================= -->
 <section id="s16" data-progress="Proof">
   <div class="frame">
-    <h2 class="title">The Coder agrees with experts about as well as experts agree with each other.</h2>
+    <h2 class="title">The Coder agrees with the expert consensus at least as well as experts do.</h2>
     <div class="body">
       <div class="row grow s16-row">
-        <div class="card chart-card"><div class="chart-h"><b>Agreement with expert labels (Cohen's κ)</b><span class="legend"><i class="lg teal"></i>MIRA (gpt-5.4)<i class="lg slate"></i>Human ceiling</span></div><div class="cwrap"><canvas id="chart-kappa"></canvas></div></div>
+        <div class="card chart-card"><div class="chart-h"><b>Agreement with expert consensus (κ) · 7 sessions coded by 10 experts</b><span class="legend"><i class="lg teal"></i>MIRA (gpt-5.4)<i class="lg slate"></i>Human ceiling</span></div><div class="cwrap"><canvas id="chart-kappa"></canvas></div></div>
         <div class="col side-cards">
-          <div class="card tight sc"><span class="icon-badge"><span class="ms">dataset</span></span><p><b>1,276 turns</b> from 27 held-out sessions</p></div>
-          <div class="card tight sc"><span class="icon-badge"><span class="ms">model_training</span></span><p>Model chosen by data: <b>gpt-5.4 κ 0.86</b> vs mini 0.76</p></div>
-          <div class="card tight sc"><span class="icon-badge"><span class="ms">tune</span></span><p>One prompt rule (“Yes.” = neutral) lifted client-talk κ <b>0.47 → 0.61</b></p></div>
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">dataset</span></span><p><b>1,276 turns</b> from 27 held-out sessions: κ 0.85 on main behaviour</p></div>
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">model_training</span></span><p>Model chosen by data: <b>gpt-5.4 κ 0.85</b> vs mini 0.78</p></div>
+          <div class="card tight sc"><span class="icon-badge"><span class="ms">tune</span></span><p>One prompt rule (“Yes.” = neutral) lifted client-talk κ by <b>+0.14</b></p></div>
         </div>
       </div>
     </div>
   </div>
-  <aside class="notes">On nearly 1,300 held-out turns, the Coder matches or beats the human ceiling on three of five code families and is within a few points on the other two. Data picked our model and tuned our prompt: one rule lifted client-talk agreement by 14 points.</aside>
+  <aside class="notes">On the seven sessions that ten experts coded independently, the Coder agrees with the expert consensus better than a typical expert does, on all five code families. Across all 1,276 held-out turns it reaches kappa 0.85 on main behaviour. Data picked our model and tuned our prompt: one rule lifted client-talk agreement by 14 points.</aside>
 </section>
 
 <!-- ================= S17 · GOOD VS POOR ================= -->
@@ -549,12 +549,12 @@
       <div class="row grow s17-row">
         <div class="card chart-card"><div class="chart-h"><b>Proficiency points per held-out session</b><span class="legend"><i class="lg teal"></i>expert-rated high (n=17)<i class="lg coral"></i>low (n=10)<i class="lg ink"></i>mean</span></div><div class="cwrap"><canvas id="chart-auc"></canvas></div></div>
         <div class="col auc-side">
-          <div class="stat big-auc"><div class="v">0.994</div><div class="l">AUC, proficiency score<br>(1 mis-ordered pair out of 170)</div></div>
-          <div class="row two-auc"><div class="stat sm"><div class="v">0.98</div><div class="l">Empathy AUC</div></div><div class="stat sm"><div class="v">1.00</div><div class="l">Collaboration AUC</div></div></div>
+          <div class="stat big-auc"><div class="v">0.98</div><div class="l">AUC, proficiency score<br>(164 of 170 pairs right, 4 tied, 2 reversed)</div></div>
+          <div class="row two-auc"><div class="stat sm"><div class="v">0.99</div><div class="l">Empathy AUC</div></div><div class="stat sm"><div class="v">0.99</div><div class="l">Collaboration AUC</div></div></div>
           <div class="eyebrow">Trust signals</div>
           <div class="sig4">
             <div><b>100%</b><span>citations valid</span></div>
-            <div><b>0</b><span>score change on re-runs</span></div>
+            <div><b>0 pts</b><span>change on Supervisor re-run</span></div>
             <div><b>10%</b><span>word error rate</span></div>
             <div><b>100%</b><span>speaker roles correct</span></div>
           </div>
@@ -562,7 +562,7 @@
       </div>
     </div>
   </div>
-  <aside class="notes">Never seeing the expert's quality label, MIRA puts almost every good session above every poor one: AUC 0.994; one pair out of 170 out of order. Citations 100% valid, identical scores on re-runs, speaker roles 100% right.</aside>
+  <aside class="notes">Never seeing the expert's quality label, MIRA scores the good session higher in 164 of 170 good-versus-poor pairs: AUC 0.98, with 4 ties and 2 reversed. Empathy and collaboration together separate every pair. Citations 100% valid, the Supervisor gives the same points when re-run, and speaker roles were 100% right on our held-out video.</aside>
 </section>
 
 <!-- ================= S18 · HONEST GAPS ================= -->
@@ -574,14 +574,14 @@
         <div class="col well">
           <div class="eyebrow teal">What went well</div>
           <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>κ ≈ experts</b></div>
-          <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>AUC 0.994</b></div>
+          <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>AUC 0.98</b></div>
           <div class="card tight strength-card"><span class="ms teal">thumb_up</span><b>100% grounded feedback</b></div>
         </div>
         <div class="col grow">
           <div class="eyebrow coral">What to improve</div>
           <div class="gaps">
-            <div class="card trap-card gap"><h3>Reflection depth wobbles</h3><p>40 of 110 expert-complex reflections coded simple; demo score varied 6–8 across runs.</p><div class="fix"><span class="lbl">Fix</span>Run the Coder 3× and take the majority vote.</div></div>
-            <div class="card trap-card gap"><h3>Bands are strict</h3><p>Ranking is right, but 7 of 17 good sessions land in “Developing”.</p><div class="fix"><span class="lbl">Fix</span>Calibrate bands to AnnoMI percentiles.</div></div>
+            <div class="card trap-card gap"><h3>Reflection depth wobbles</h3><p>36 of 110 expert-complex reflections coded simple (experts agree only κ 0.22 on this call); demo score varied 6–8 across runs.</p><div class="fix"><span class="lbl">Fix</span>Run the Coder 3× and take the majority vote.</div></div>
+            <div class="card trap-card gap"><h3>Bands are strict</h3><p>Ranking is right, but 8 of 17 good sessions land in “Developing”.</p><div class="fix"><span class="lbl">Fix</span>Calibrate bands to AnnoMI percentiles.</div></div>
             <div class="card trap-card gap"><h3>Audio merges short turns</h3><p>70% of expert utterances matched (“Mm-hmm” gets merged).</p><div class="fix"><span class="lbl">Fix</span>Word-level timestamps; split backchannels.</div></div>
             <div class="card trap-card gap"><h3>Not yet validated</h3><p>%MI-adherent has no expert labels; text only; prototype (no auth or storage).</p><div class="fix"><span class="lbl">Fix</span>Pilot on real, human-coded sessions.</div></div>
           </div>
@@ -719,10 +719,10 @@
     <div class="body">
       <div class="kept">
         <div class="kp"><span class="ms fill tick fragment" data-fragment-index="0">check_circle</span><span class="ms pi">rule</span><b>Standards-based</b><span>MITI 4.2.1 + AnnoMI expert labels</span></div>
-        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="1">check_circle</span><span class="ms pi">link</span><b>Grounded</b><span>483 / 483 citations valid</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="1">check_circle</span><span class="ms pi">link</span><b>Grounded</b><span>479 / 479 citations valid</span></div>
         <div class="kp"><span class="ms fill tick fragment" data-fragment-index="2">check_circle</span><span class="ms pi">lightbulb</span><b>Actionable</b><span>a better response for every trap</span></div>
         <div class="kp"><span class="ms fill tick fragment" data-fragment-index="3">check_circle</span><span class="ms pi">bolt</span><b>Fast &amp; affordable</b><span>~1 minute, ≈ $0.09 per 3-min review</span></div>
-        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="4">check_circle</span><span class="ms pi">verified</span><b>Measured</b><span>κ ≈ experts; AUC 0.994</span></div>
+        <div class="kp"><span class="ms fill tick fragment" data-fragment-index="4">check_circle</span><span class="ms pi">verified</span><b>Measured</b><span>κ ≥ experts; AUC 0.98</span></div>
       </div>
       <div class="closing fragment rise" data-fragment-index="5">
         <div class="cq">“…maybe I could try to cut back a little bit.”</div>
