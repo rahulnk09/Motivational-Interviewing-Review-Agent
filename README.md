@@ -1,4 +1,4 @@
-# MI Review Coach
+# MIRA · MI Review App
 
 **AI review of Motivational Interviewing (MI) sessions.** Upload a recorded counselling session (video or audio). The app transcribes it, separates the clinician from the client, codes every turn using MI research standards (MITI 4.2.1 / AnnoMI), scores the session against an MI proficiency rubric, and gives timestamped coaching feedback: what went well, what to improve, and what the clinician could have said instead.
 
@@ -639,7 +639,7 @@ All settings are read from `.env` in the repository root (`config.py`).
 **Option B: a zip of committed files only.** Commit first, then:
 
 ```powershell
-git archive --format=zip -o mi_review_coach.zip HEAD
+git archive --format=zip -o mira_mi_review_app.zip HEAD
 ```
 
 This automatically leaves out everything in `.gitignore`.

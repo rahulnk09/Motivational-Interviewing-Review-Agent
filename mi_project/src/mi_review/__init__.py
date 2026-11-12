@@ -1,1 +1,1 @@
-"""MI Review Coach: Motivational Interviewing session review."""
+"""MIRA (MI Review App): Motivational Interviewing session review."""

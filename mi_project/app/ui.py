@@ -1,4 +1,4 @@
-"""Rendering helpers for the MI Review Coach Streamlit app."""
+"""Rendering helpers for the MIRA (MI Review App) Streamlit app."""
 
 import json
 from pathlib import Path

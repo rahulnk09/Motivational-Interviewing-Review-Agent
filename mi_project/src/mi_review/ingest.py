@@ -60,7 +60,7 @@ def analyzer_definition() -> ContentAnalyzer:
     settings = get_settings()
     return ContentAnalyzer(
         base_analyzer_id=settings.cu_base_analyzer,
-        description="MI Review Coach: diarized transcript plus session metadata for motivational interviewing review",
+        description="MIRA (MI Review App): diarized transcript plus session metadata for motivational interviewing review",
         config=ContentAnalyzerConfig(return_details=True, locales=list(settings.cu_locales)),
         field_schema=FIELD_SCHEMA,
         models={"completion": settings.cu_completion_model},

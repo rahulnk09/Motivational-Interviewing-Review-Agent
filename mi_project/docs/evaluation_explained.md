@@ -1,4 +1,4 @@
-# How MI Review Coach is evaluated
+# How MIRA (MI Review App) is evaluated
 
 An explanation of the three evaluations in `src/mi_review/evals/`: what each one measures, which part of the pipeline it tests, how every number is calculated (with real AnnoMI examples), and what to watch out for in the demo.
 
